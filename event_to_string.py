@@ -35,6 +35,27 @@ def event_to_string(state_event):
 
     info = f'{event_type}:{key_name}'
 
-    
+    # 마우스 위치 정보 추가
+    if event.type in (SDL_MOUSEMOTION, SDL_MOUSEBUTTONDOWN, SDL_MOUSEBUTTONUP):
+        info += f', pos=({event.x},{event.y})'
+
+    # 마우스 버튼 정보 추가
+    if event.type in (SDL_MOUSEBUTTONDOWN, SDL_MOUSEBUTTONUP):
+        info += f', button={event.button}'
+
+    # 마우스 휠 정보 추가
+    if event.type == SDL_MOUSEWHEEL:
+        # SDL_MOUSEWHEEL에는 보통 x,y로 휠의 델타가 들어있음
+        wheel_x = getattr(event, 'x', None)
+        wheel_y = getattr(event, 'y', None)
+        if wheel_x is not None or wheel_y is not None:
+            info += f', wheel=({wheel_x},{wheel_y})'
+        # 일부 구현에서는 방향 등의 추가 필드가 있을 수 있음
+        if hasattr(event, 'direction'):
+            info += f', direction={event.direction}'
+
+    # 수정자 키 정보 추가 (Shift, Ctrl, Alt 등)
+    if hasattr(event, 'mod') and event.mod:
+        info += f', mod={event.mod}'
 
     return f"('{state_event_type}', {info})"
