@@ -23,6 +23,11 @@ def handle_events():
         if event.type == SDL_QUIT:
             game_framework.quit()
 
+        elif event.type == SDL_KEYDOWN:
+            if event.key == SDLK_SPACE:  # '=' 키
+                pass
+            elif event.key == SDLK_ESCAPE:
+                game_framework.quit()
 
 
 def update():
@@ -38,8 +43,5 @@ def draw():
 def finish():
     game_world.clear()
 
-
 def pause(): pass
-
-
 def resume(): pass
