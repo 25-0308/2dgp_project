@@ -29,6 +29,8 @@ def handle_events():
             elif event.key == SDLK_ESCAPE:
                 game_framework.quit()
 
+        
+
 
 def update():
     game_world.update()
