@@ -5,7 +5,6 @@ import game_framework
 import game_world
 
 global bg_timer
-bg_timer = game_framework.frame_time
 
 global bg_count
 
@@ -20,7 +19,9 @@ def handle_events():
 def init():
     global bg
     global bg_count
+    global bg_timer
     bg_count = 0
+    bg_timer = game_framework.frame_time
 
     global canvas_x, canvas_y
     canvas_x, canvas_y = 1280, 720
@@ -31,7 +32,13 @@ def update():
     game_world.update()
     global bg_count
     global bg
-    bg_count += 1
+    global bg_timer
+
+    bg_timer += game_framework.frame_time
+    if bg_timer >= 0.25:
+        bg_timer = 0.0
+        bg_count += 1
+
     bg = load_image(f'stage_{bg_count % 8}.png')
     game_world.handle_collisions()
 
