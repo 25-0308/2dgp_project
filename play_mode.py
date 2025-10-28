@@ -28,6 +28,9 @@ def init():
 
     bg = load_image(f'stage_{bg_count}.png')
 
+    global player_l
+    player_l = load_image(f'player_{bg_count}.png')
+
 def update():
     game_world.update()
     global bg_count
@@ -35,7 +38,7 @@ def update():
     global bg_timer
 
     bg_timer += game_framework.frame_time
-    if bg_timer >= 0.25:
+    if bg_timer >= 0.15:
         bg_timer = 0.0
         bg_count += 1
 
