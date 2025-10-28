@@ -4,6 +4,9 @@ from pico2d import *
 import game_framework
 import game_world
 
+global bg_timer
+bg_timer = game_framework.frame_time
+
 def handle_events():
     event_list = get_events()
     for event in event_list:
@@ -13,7 +16,11 @@ def handle_events():
             game_framework.quit()
 
 def init():
-    pass
+    global bg
+    global canvas_x, canvas_y
+    canvas_x, canvas_y = 1280, 720
+
+    bg = load_image('stage_0.png')
 
 def update():
     game_world.update()
@@ -21,6 +28,8 @@ def update():
 
 def draw():
     clear_canvas()
+    bg.clip_composite_draw(0, 0, 752, 224, 0,'0',
+                           canvas_x // 2, canvas_y // 2,canvas_x,canvas_y)
     game_world.render()
     update_canvas()
 
