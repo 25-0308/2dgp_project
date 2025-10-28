@@ -7,6 +7,8 @@ import game_world
 global bg_timer
 bg_timer = game_framework.frame_time
 
+global bg_count
+
 def handle_events():
     event_list = get_events()
     for event in event_list:
@@ -17,13 +19,20 @@ def handle_events():
 
 def init():
     global bg
+    global bg_count
+    bg_count = 0
+
     global canvas_x, canvas_y
     canvas_x, canvas_y = 1280, 720
 
-    bg = load_image('stage_0.png')
+    bg = load_image(f'stage_{bg_count}.png')
 
 def update():
     game_world.update()
+    global bg_count
+    global bg
+    bg_count += 1
+    bg = load_image(f'stage_{bg_count % 8}.png')
     game_world.handle_collisions()
 
 def draw():
