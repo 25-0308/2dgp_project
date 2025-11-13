@@ -2,6 +2,7 @@ import random
 from pico2d import *
 
 import game_framework
+from player_kk import Playerkk
 import game_world
 
 global bg_timer
@@ -27,7 +28,9 @@ def init():
     canvas_x, canvas_y = 1280, 720
 
     bg = load_image(f'stage_{bg_count}.png')
-
+    global kk
+    kk = Playerkk()
+    game_world.add_object(kk)
 
 def update():
     game_world.update()
