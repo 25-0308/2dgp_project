@@ -71,7 +71,7 @@ class Idle:
 
 class Playerkk:
     def __init__(self):
-        self.x, self.y = 950, 150
+        self.x, self.y = 950, 200
         self.frame = 0
         self.face_dir = 1
         self.dir = 0
@@ -99,7 +99,7 @@ class Playerkk:
         draw_rectangle(*self.get_bb())
 
     def get_bb(self):
-        return self.x - 60, self.y - 150, self.x + 75, self.y + 150
+        return self.x - 40, self.y - 130, self.x + 55, self.y + 130
 
     def handle_collision(self, group, other):
         pass
