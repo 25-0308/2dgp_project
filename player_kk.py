@@ -1,11 +1,19 @@
 from pico2d import load_image, get_time, load_font, draw_rectangle, pico2d_image_loader
-from sdl2 import SDL_KEYDOWN, SDLK_RIGHT, SDL_KEYUP, SDLK_LEFT
+from sdl2 import SDL_KEYDOWN, SDLK_RIGHT, SDL_KEYUP, SDLK_LEFT, SDLK_UP
 import os
 
 
 import game_framework
 
 from state_machine import StateMachine
+
+time_out = lambda e: e[0] == 'TIMEOUT'
+
+def up_down(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_UP
+
+def up_up(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_UP
 
 def right_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_RIGHT
@@ -38,6 +46,43 @@ def load_resource(path):
     base_dir = os.path.dirname(__file__)
     abs_path = os.path.join(base_dir, 'kk', path)
     return load_image(abs_path)
+
+class Jump:
+    def __init__(self, kk):
+        self.player_kk = kk
+        self.jump_frame = 0
+
+    def enter(self, e):
+        self.jump_frame = 0
+        self.player_kk.y = 350
+
+
+    def exit(self, e):
+        self.player_kk.dir = 0
+
+    def do(self):
+        self.jump_frame = (self.jump_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time * 2) % 14
+
+        self.player_kk.load_image(f'kk_jump_sheet.png')
+
+        self.player_kk.x += self.player_kk.dir * RUN_SPEED_PPS * game_framework.frame_time
+
+        if self.player_kk.x < 50:
+            self.player_kk.x = 50
+        elif self.player_kk.x > 1230:
+            self.player_kk.x = 1230
+
+        if self.jump_frame >= 13:
+            self.player_kk.y = 200
+            self.player_kk.state_machine.handle_state_event(('TIMEOUT', None))
+
+    def draw(self):
+        if self.player_kk.face_dir == 1:
+            self.player_kk.image.clip_composite_draw(67 * int(self.jump_frame), 0, 67, 201, 0, 'h',
+                                                     self.player_kk.x, self.player_kk.y,180,600)
+        else:
+            self.player_kk.image.clip_composite_draw(67 * int(self.jump_frame), 0, 67, 201, 0, '0',
+                                                     self.player_kk.x, self.player_kk.y,180,600)
 
 class Run:
     def __init__(self, kk):
@@ -113,12 +158,15 @@ class Playerkk:
 
         self.IDLE = Idle(self)
         self.RUN = Run(self)
+        self.JUMP = Jump(self)
+
         self.state_machine = StateMachine(
             self.IDLE,
 {
-            self.IDLE: {right_down: self.RUN, left_down: self.RUN},
+            self.IDLE: {right_down: self.RUN, left_down: self.RUN, up_down: self.JUMP},
             self.RUN: {right_up: self.IDLE, left_up: self.IDLE, right_down: self.IDLE,
-               left_down: self.IDLE},
+               left_down: self.IDLE, up_down: self.JUMP},
+            self.JUMP: {time_out: self.IDLE},
             }
         )
 
