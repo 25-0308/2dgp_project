@@ -1,13 +1,11 @@
 from pico2d import load_image, get_time, load_font, draw_rectangle, pico2d_image_loader
-from sdl2 import SDL_KEYDOWN, SDLK_SPACE, SDLK_RIGHT, SDL_KEYUP, SDLK_LEFT
+from sdl2 import SDL_KEYDOWN, SDLK_RIGHT, SDL_KEYUP, SDLK_LEFT
 import os
 
-import game_world
+
 import game_framework
 
 from state_machine import StateMachine
-
-time_out = lambda e: e[0] == 'TIMEOUT'
 
 def right_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_RIGHT
@@ -26,7 +24,7 @@ def left_up(e):
 
 
 PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
-RUN_SPEED_KMPH = 20.0  # Km / Hour
+RUN_SPEED_KMPH = 30.0  # Km / Hour
 RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
@@ -45,10 +43,8 @@ class Run:
     def __init__(self, kk):
         self.player_kk = kk
         self.run_frame = 0
-        self.player_kk.frame = 0
 
     def enter(self, e):
-        self.player_kk.wait_time = get_time()
         if right_down(e):
             self.player_kk.dir = 1
         elif left_down(e):
@@ -69,17 +65,16 @@ class Run:
 
     def draw(self):
         if self.player_kk.face_dir == 1:
-            self.player_kk.image.clip_composite_draw(0, 0, 62, 107, 0, '',
+            self.player_kk.image.clip_composite_draw(0, 0, 62, 107, 0, 'h',
                                                      self.player_kk.x, self.player_kk.y,150,300)
         else:
-            self.player_kk.image.clip_composite_draw(0, 0, 62, 107, 0, 'h',
+            self.player_kk.image.clip_composite_draw(0, 0, 62, 107, 0, '0',
                                                      self.player_kk.x, self.player_kk.y,150,300)
 
 class Idle:
     def __init__(self, kk):
         self.player_kk = kk
         self.idle_frame = 0
-        self.player_kk.frame = 0
 
     def enter(self, e):
         self.player_kk.dir = 0
@@ -111,9 +106,11 @@ class Playerkk:
         self.RUN = Run(self)
         self.state_machine = StateMachine(
             self.IDLE,
-            {
-                self.IDLE: {left_down: self.RUN, right_down: self.RUN},
-                self.RUN: {left_up: self.IDLE, right_up: self.IDLE},
+{
+            self.IDLE: {right_down: self.RUN, left_down: self.RUN,
+                right_up: self.RUN, left_up: self.RUN},
+            self.RUN: {right_up: self.IDLE, left_up: self.IDLE, right_down: self.IDLE,
+               left_down: self.IDLE},
             }
         )
 

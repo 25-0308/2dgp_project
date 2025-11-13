@@ -16,6 +16,8 @@ def handle_events():
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.quit()
+        else:
+            kk.handle_event(event)
 
 def init():
     global bg
@@ -50,7 +52,6 @@ def draw():
     clear_canvas()
     bg.clip_composite_draw(0, 0, 752, 224, 0,'0',
                            canvas_x // 2, canvas_y // 2,canvas_x,canvas_y)
-    #player_l.clip_composite_draw(0,0,128,224,0,'0',900,200,200,300)
     game_world.render()
     update_canvas()
 
