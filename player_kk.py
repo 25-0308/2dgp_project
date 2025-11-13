@@ -59,7 +59,7 @@ class Idle:
     def do(self):
         self.player_kk.frame = (self.player_kk.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 4
 
-        self.player_kk.load_image(f'kk_{int(self.player_kk.frame)}.png',)
+        self.player_kk.load_image(f'kk_idle_{int(self.player_kk.frame)}.png')
 
     def draw(self):
         if self.player_kk.face_dir == 1:
@@ -75,7 +75,7 @@ class Playerkk:
         self.frame = 0
         self.face_dir = 1
         self.dir = 0
-        self.load_image(f'kk_{self.frame}.png')
+        self.load_image(f'kk_idle_{self.frame}.png')
 
         self.IDLE = Idle(self)
         self.state_machine = StateMachine(
