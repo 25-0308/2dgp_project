@@ -7,10 +7,6 @@ import game_framework
 
 from state_machine import StateMachine
 
-
-def space_down(e): # e is space down ?
-    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_SPACE
-
 time_out = lambda e: e[0] == 'TIMEOUT'
 
 def right_down(e):
@@ -45,21 +41,55 @@ def load_resource(path):
     abs_path = os.path.join(base_dir, 'kk', path)
     return load_image(abs_path)
 
-class Idle:
+class Run:
     def __init__(self, kk):
         self.player_kk = kk
+        self.run_frame = 0
+        self.player_kk.frame = 0
 
     def enter(self, e):
         self.player_kk.wait_time = get_time()
+        if right_down(e):
+            self.player_kk.dir = 1
+        elif left_down(e):
+            self.player_kk.dir = -1
+
+    def exit(self, e):
+        pass
+
+    def do(self):
+        self.run_frame = (self.run_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 5
+        self.player_kk.load_image(f'kk_walk_{int(self.run_frame)}.png')
+
+        self.player_kk.x += self.player_kk.dir * RUN_SPEED_PPS * game_framework.frame_time
+        if self.player_kk.x < 50:
+            self.player_kk.x = 50
+        elif self.player_kk.x > 1230:
+            self.player_kk.x = 1230
+
+    def draw(self):
+        if self.player_kk.face_dir == 1:
+            self.player_kk.image.clip_composite_draw(0, 0, 62, 107, 0, '',
+                                                     self.player_kk.x, self.player_kk.y,150,300)
+        else:
+            self.player_kk.image.clip_composite_draw(0, 0, 62, 107, 0, 'h',
+                                                     self.player_kk.x, self.player_kk.y,150,300)
+
+class Idle:
+    def __init__(self, kk):
+        self.player_kk = kk
+        self.idle_frame = 0
+        self.player_kk.frame = 0
+
+    def enter(self, e):
         self.player_kk.dir = 0
 
     def exit(self, e):
         pass
 
     def do(self):
-        self.player_kk.frame = (self.player_kk.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 4
-
-        self.player_kk.load_image(f'kk_idle_{int(self.player_kk.frame)}.png')
+        self.idle_frame = (self.idle_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 4
+        self.player_kk.load_image(f'kk_idle_{int(self.idle_frame)}.png')
 
     def draw(self):
         if self.player_kk.face_dir == 1:
@@ -78,10 +108,12 @@ class Playerkk:
         self.load_image(f'kk_idle_{self.frame}.png')
 
         self.IDLE = Idle(self)
+        self.RUN = Run(self)
         self.state_machine = StateMachine(
             self.IDLE,
             {
-                self.IDLE: {space_down: self.IDLE},
+                self.IDLE: {left_down: self.RUN, right_down: self.RUN},
+                self.RUN: {left_up: self.IDLE, right_up: self.IDLE},
             }
         )
 
