@@ -45,17 +45,23 @@ class Run:
         self.run_frame = 0
 
     def enter(self, e):
+        self.run_frame = 0
         if right_down(e):
             self.player_kk.dir = 1
+            self.player_kk.load_image(f'kk_backwalk_{self.run_frame}.png')
         elif left_down(e):
             self.player_kk.dir = -1
+            self.player_kk.load_image(f'kk_walk_{self.run_frame}.png')
 
     def exit(self, e):
         pass
 
     def do(self):
-        self.run_frame = (self.run_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 5
-        self.player_kk.load_image(f'kk_walk_{int(self.run_frame)}.png')
+        self.run_frame = (self.run_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 6
+        if self.player_kk.dir == -1:
+            self.player_kk.load_image(f'kk_walk_{int(self.run_frame)}.png')
+        elif self.player_kk.dir == 1:
+            self.player_kk.load_image(f'kk_backwalk_{int(self.run_frame)}.png')
 
         self.player_kk.x += self.player_kk.dir * RUN_SPEED_PPS * game_framework.frame_time
         if self.player_kk.x < 50:
@@ -65,10 +71,11 @@ class Run:
 
     def draw(self):
         if self.player_kk.face_dir == 1:
-            self.player_kk.image.clip_composite_draw(0, 0, 62, 107, 0, 'h',
+                self.player_kk.image.clip_composite_draw(0, 0, 62, 107, 0, 'h',
                                                      self.player_kk.x, self.player_kk.y,150,300)
         else:
-            self.player_kk.image.clip_composite_draw(0, 0, 62, 107, 0, '0',
+            if self.player_kk.dir == 1:
+                self.player_kk.image.clip_composite_draw(0, 0, 62, 107, 0, '0',
                                                      self.player_kk.x, self.player_kk.y,150,300)
 
 class Idle:
@@ -78,6 +85,8 @@ class Idle:
 
     def enter(self, e):
         self.player_kk.dir = 0
+        self.player_kk.load_image(f'kk_walk_{int(self.idle_frame)}.png')
+        self.idle_frame = 0
 
     def exit(self, e):
         pass
@@ -107,8 +116,7 @@ class Playerkk:
         self.state_machine = StateMachine(
             self.IDLE,
 {
-            self.IDLE: {right_down: self.RUN, left_down: self.RUN,
-                right_up: self.RUN, left_up: self.RUN},
+            self.IDLE: {right_down: self.RUN, left_down: self.RUN},
             self.RUN: {right_up: self.IDLE, left_up: self.IDLE, right_down: self.IDLE,
                left_down: self.IDLE},
             }
