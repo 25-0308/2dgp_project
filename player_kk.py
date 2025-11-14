@@ -1,5 +1,5 @@
 from pico2d import load_image, get_time, load_font, draw_rectangle, pico2d_image_loader
-from sdl2 import SDL_KEYDOWN, SDLK_RIGHT, SDL_KEYUP, SDLK_LEFT, SDLK_UP
+from sdl2 import SDL_KEYDOWN, SDLK_RIGHT, SDL_KEYUP, SDLK_LEFT, SDLK_UP, SDLK_k
 import os
 
 
@@ -8,6 +8,12 @@ import game_framework
 from state_machine import StateMachine
 
 time_out = lambda e: e[0] == 'TIMEOUT'
+
+def k_down(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_k
+
+def k_up(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_k
 
 def up_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_UP
@@ -47,6 +53,34 @@ def load_resource(path):
     abs_path = os.path.join(base_dir, 'kk', path)
     return load_image(abs_path)
 
+class Kick:
+    def __init__(self, kk):
+        self.player_kk = kk
+        self.kick_frame = 0
+
+    def enter(self, e):
+        self.kick_frame = 0
+
+    def exit(self, e):
+        pass
+
+    def do(self):
+        self.kick_frame = (self.kick_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time * 2) % 8
+        if self.player_kk.face_dir == -1:
+            self.player_kk.load_image(f'kk_kick_{int(self.kick_frame)}.png')
+        elif self.player_kk.face_dir == 1:
+            self.player_kk.load_image(f'kk_kick_{int(self.kick_frame)}.png')
+        if self.kick_frame >= 7:
+            self.player_kk.state_machine.handle_state_event(('TIMEOUT', None))
+
+    def draw(self):
+        if self.player_kk.face_dir == 1:
+            self.player_kk.image.clip_composite_draw(0, 0, 120, 111, 0, 'h',
+                                                     self.player_kk.x, self.player_kk.y,300,300)
+        else:
+            self.player_kk.image.clip_composite_draw(0, 0, 120, 111, 0, '0',
+                                                     self.player_kk.x, self.player_kk.y,300,300)
+
 class Jump:
     def __init__(self, kk):
         self.player_kk = kk
@@ -61,7 +95,7 @@ class Jump:
         self.player_kk.dir = 0
 
     def do(self):
-        self.jump_frame = (self.jump_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time * 2) % 14
+        self.jump_frame = (self.jump_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time * 3) % 14
 
         self.player_kk.load_image(f'kk_jump_sheet.png')
 
@@ -159,14 +193,16 @@ class Playerkk:
         self.IDLE = Idle(self)
         self.RUN = Run(self)
         self.JUMP = Jump(self)
+        self.KICK = Kick(self)
 
         self.state_machine = StateMachine(
             self.IDLE,
 {
-            self.IDLE: {right_down: self.RUN, left_down: self.RUN, up_down: self.JUMP},
+            self.IDLE: {right_down: self.RUN, left_down: self.RUN, up_down: self.JUMP, k_down: self.KICK},
             self.RUN: {right_up: self.IDLE, left_up: self.IDLE, right_down: self.IDLE,
-               left_down: self.IDLE, up_down: self.JUMP},
+               left_down: self.IDLE, up_down: self.JUMP, k_down: self.KICK},
             self.JUMP: {time_out: self.IDLE},
+            self.KICK: {time_out: self.IDLE},
             }
         )
 

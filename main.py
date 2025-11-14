@@ -9,4 +9,3 @@ import ending_mode
 open_canvas(1280, 720)
 game_framework.run(select_mode)
 close_canvas()
-
