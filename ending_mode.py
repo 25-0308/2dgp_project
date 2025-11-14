@@ -17,7 +17,7 @@ def init():
     global winner_mai
 
     global font
-    font = load_font('kof_font.TTF', 140)
+    font = load_font('kof_font.TTF', 80)
 
     title = load_image('stage_0.png')
     winner_kk = load_image('kk_win.png')
@@ -43,7 +43,7 @@ def render_world():
         winner_iori.clip_composite_draw(0, 0, 1160, 752, 0, '0',
                                    canvas_x // 2, canvas_y // 2 - 120, canvas_x // 3 * 2, canvas_y // 3 * 2)
 
-    font.draw(canvas_x // 2 - 300, 600, 'WINNER!', (255, 255, 0))
+    font.draw(canvas_x // 2 - 260, 600, 'WINNER!', (255, 255, 0))
 
 def handle_events():
     global x, y
