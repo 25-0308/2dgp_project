@@ -1,5 +1,5 @@
 from pico2d import load_image, get_time, load_font, draw_rectangle, pico2d_image_loader
-from sdl2 import SDL_KEYDOWN, SDLK_RIGHT, SDL_KEYUP, SDLK_LEFT, SDLK_UP, SDLK_k
+from sdl2 import SDL_KEYDOWN, SDLK_RIGHT, SDL_KEYUP, SDLK_LEFT, SDLK_UP, SDLK_k, SDLK_j
 import os
 
 
@@ -14,6 +14,12 @@ def k_down(e):
 
 def k_up(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_k
+
+def j_down(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_j
+
+def j_up(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_j
 
 def up_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_UP
@@ -52,6 +58,34 @@ def load_resource(path):
     base_dir = os.path.dirname(__file__)
     abs_path = os.path.join(base_dir, 'kk', path)
     return load_image(abs_path)
+
+class Punch:
+    def __init__(self, kk):
+        self.player_kk = kk
+        self.punch_frame = 0
+
+    def enter(self, e):
+        self.punch_frame = 0
+
+    def exit(self, e):
+        pass
+
+    def do(self):
+        self.punch_frame = (self.punch_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time * 2) % 6
+        if self.player_kk.face_dir == -1:
+            self.player_kk.load_image(f'kk_punch_{int(self.punch_frame)}.png')
+        elif self.player_kk.face_dir == 1:
+            self.player_kk.load_image(f'kk_punch_{int(self.punch_frame)}.png')
+        if self.punch_frame >= 5:
+            self.player_kk.state_machine.handle_state_event(('TIMEOUT', None))
+
+    def draw(self):
+        if self.player_kk.face_dir == 1:
+            self.player_kk.image.clip_composite_draw(0, 0, 131, 119, 0, 'h',
+                                                     self.player_kk.x, self.player_kk.y,340,320)
+        else:
+            self.player_kk.image.clip_composite_draw(0, 0, 131, 119, 0, '0',
+                                                     self.player_kk.x, self.player_kk.y,340,320)
 
 class Kick:
     def __init__(self, kk):
@@ -194,15 +228,18 @@ class Playerkk:
         self.RUN = Run(self)
         self.JUMP = Jump(self)
         self.KICK = Kick(self)
+        self.PUNCH = Punch(self)
 
         self.state_machine = StateMachine(
             self.IDLE,
 {
-            self.IDLE: {right_down: self.RUN, left_down: self.RUN, up_down: self.JUMP, k_down: self.KICK},
+            self.IDLE: {right_down: self.RUN, left_down: self.RUN, up_down: self.JUMP,
+                        k_down: self.KICK, j_down: self.PUNCH},
             self.RUN: {right_up: self.IDLE, left_up: self.IDLE, right_down: self.IDLE,
-               left_down: self.IDLE, up_down: self.JUMP, k_down: self.KICK},
+               left_down: self.IDLE, up_down: self.JUMP, k_down: self.KICK, j_down: self.PUNCH},
             self.JUMP: {time_out: self.IDLE},
             self.KICK: {time_out: self.IDLE},
+            self.PUNCH: {time_out: self.IDLE},
             }
         )
 
