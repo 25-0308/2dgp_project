@@ -4,6 +4,7 @@ from pico2d import *
 import game_framework
 from player_kk import Playerkk
 import game_world
+import ending_mode
 
 global bg_timer
 
@@ -16,6 +17,8 @@ def handle_events():
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.quit()
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_p:
+            game_framework.change_mode(ending_mode)
         else:
             kk.handle_event(event)
 

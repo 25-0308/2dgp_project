@@ -1,4 +1,5 @@
 import time
+import game_world
 frame_time = 0.0
 
 running = None
