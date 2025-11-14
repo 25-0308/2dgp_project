@@ -4,6 +4,8 @@ import game_framework
 import game_world
 import play_mode
 
+global font
+
 # 초기 화면 구성
 def init():
     global title
@@ -14,6 +16,9 @@ def init():
     global winner_kyo
     global winner_mai
 
+    global font
+    font = load_font('kof_font.TTF', 140)
+
     title = load_image('stage_0.png')
     winner_kk = load_image('kk_win.png')
     winner_iori = load_image('iori_win.png')
@@ -21,6 +26,7 @@ def init():
     winner_mai = load_image('mai_win.png')
 
 def render_world():
+    global font
     character_index = game_framework.get_character_index()
     title.clip_composite_draw(0,0,752,224,0,'0',
                               canvas_x // 2, canvas_y // 2,canvas_x,canvas_y)
@@ -36,6 +42,8 @@ def render_world():
     elif character_index == 4:
         winner_iori.clip_composite_draw(0, 0, 1160, 752, 0, '0',
                                    canvas_x // 2, canvas_y // 2 - 120, canvas_x // 3 * 2, canvas_y // 3 * 2)
+
+    font.draw(canvas_x // 2 - 300, 600, 'WINNER!', (255, 255, 0))
 
 def handle_events():
     global x, y
