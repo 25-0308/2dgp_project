@@ -3,22 +3,42 @@ from pico2d import *
 import game_framework
 import game_world
 import play_mode
+import select_mode
+
+global character_index
+character_index = select_mode.character_index
 
 # 초기 화면 구성
 def init():
     global title
     global canvas_x, canvas_y
     canvas_x, canvas_y = 1280, 720
-    global winner_character
+    global winner_kk
+    global winner_iori
+    global winner_kyo
+    global winner_mai
 
     title = load_image('stage_0.png')
-    winner_character = load_image('kk_win.png')
+    winner_kk = load_image('kk_win.png')
+    winner_iori = load_image('iori_win.png')
+    winner_kyo = load_image('kyo_win.png')
+    winner_mai = load_image('mai_win.png')
 
 def render_world():
     title.clip_composite_draw(0,0,752,224,0,'0',
                               canvas_x // 2, canvas_y // 2,canvas_x,canvas_y)
-    winner_character.clip_composite_draw(0,0,640,652,0,'0',
+    if character_index == 1:
+        winner_mai.clip_composite_draw(0,0,848,684,0,'0',
                               canvas_x // 2, canvas_y // 2 - 120,canvas_x // 3 * 2, canvas_y // 3 * 2)
+    elif character_index == 2:
+        winner_kk.clip_composite_draw(0, 0, 640, 652, 0, '0',
+                                   canvas_x // 2, canvas_y // 2 - 120, canvas_x // 3 * 2, canvas_y // 3 * 2)
+    elif character_index == 3:
+        winner_kyo.clip_composite_draw(0, 0, 728, 652, 0, '0',
+                                   canvas_x // 2, canvas_y // 2 - 120, canvas_x // 3 * 2, canvas_y // 3 * 2)
+    elif character_index == 4:
+        winner_iori.clip_composite_draw(0, 0, 1160, 752, 0, '0',
+                                   canvas_x // 2, canvas_y // 2 - 120, canvas_x // 3 * 2, canvas_y // 3 * 2)
 
 def handle_events():
     global x, y

@@ -2,7 +2,7 @@ from pico2d import *
 
 import game_framework
 import game_world
-import play_mode
+import select_mode
 
 # 초기 화면 구성
 def init():
@@ -25,7 +25,7 @@ def handle_events():
 
         elif event.type == SDL_KEYDOWN:
             if event.key == SDLK_SPACE:  # '=' 키
-                game_framework.change_mode(play_mode)
+                game_framework.change_mode(select_mode)
             elif event.key == SDLK_ESCAPE:
                 game_framework.quit()
 
