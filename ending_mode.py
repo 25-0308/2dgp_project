@@ -18,7 +18,7 @@ def render_world():
     title.clip_composite_draw(0,0,752,224,0,'0',
                               canvas_x // 2, canvas_y // 2,canvas_x,canvas_y)
     winner_character.clip_composite_draw(0,0,640,652,0,'0',
-                              canvas_x // 2, canvas_y // 2,canvas_x // 3 * 2, canvas_y // 3 * 2)
+                              canvas_x // 2, canvas_y // 2 - 120,canvas_x // 3 * 2, canvas_y // 3 * 2)
 
 def handle_events():
     global x, y
