@@ -20,7 +20,7 @@ def handle_events():
         elif event.type == SDL_KEYDOWN and event.key == SDLK_p:
             game_framework.change_mode(ending_mode)
         else:
-            kk.handle_event(event)
+            player_r.handle_event(event)
 
 def init():
     global bg
@@ -33,9 +33,18 @@ def init():
     canvas_x, canvas_y = 1280, 720
 
     bg = load_image(f'stage_{bg_count}.png')
-    global kk
-    kk = Playerkk()
-    game_world.add_object(kk)
+    global player_r, player_l
+
+    player_r = Playerkk()
+    player_l = Playerkk()
+
+    player_r.face_dir = 1
+    player_l.face_dir = -1
+    player_r.x , player_r.y = 950, 200
+    player_l.x , player_l.y = 330, 200
+
+    game_world.add_object(player_r)
+    game_world.add_object(player_l)
 
 def update():
     game_world.update()
