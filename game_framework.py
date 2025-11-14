@@ -1,9 +1,20 @@
 import time
 import game_world
+
 frame_time = 0.0
+
+character_index = 0
 
 running = None
 stack = None
+
+def set_character_index(index):
+    global character_index
+    character_index = index
+
+def get_character_index():
+    global character_index
+    return character_index
 
 def change_mode(mode):
     global stack

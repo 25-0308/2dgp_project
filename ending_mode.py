@@ -3,10 +3,6 @@ from pico2d import *
 import game_framework
 import game_world
 import play_mode
-import select_mode
-
-global character_index
-character_index = select_mode.character_index
 
 # 초기 화면 구성
 def init():
@@ -25,6 +21,7 @@ def init():
     winner_mai = load_image('mai_win.png')
 
 def render_world():
+    character_index = game_framework.get_character_index()
     title.clip_composite_draw(0,0,752,224,0,'0',
                               canvas_x // 2, canvas_y // 2,canvas_x,canvas_y)
     if character_index == 1:

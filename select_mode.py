@@ -4,8 +4,6 @@ import game_framework
 import game_world
 import play_mode
 
-global character_index
-
 # 초기 화면 구성
 def init():
     global title
@@ -28,16 +26,16 @@ def handle_events():
 
         elif event.type == SDL_KEYDOWN:
             if event.key == SDLK_1:
-                character_index = 1
+                game_framework.set_character_index(1)
                 game_framework.change_mode(play_mode)
             elif event.key == SDLK_2:
-                character_index = 2
+                game_framework.set_character_index(2)
                 game_framework.change_mode(play_mode)
             elif event.key == SDLK_3:
-                character_index = 3
+                game_framework.set_character_index(3)
                 game_framework.change_mode(play_mode)
             elif event.key == SDLK_4:
-                character_index = 4
+                game_framework.set_character_index(4)
                 game_framework.change_mode(play_mode)
             elif event.key == SDLK_ESCAPE:
                 game_framework.quit()
