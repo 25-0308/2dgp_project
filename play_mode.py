@@ -2,7 +2,14 @@ import random
 from pico2d import *
 
 import game_framework
+
+from random import randint
+
 from player_kk import Playerkk
+from Player_iori import Playeriori
+from player_kyo import Playerkyo
+from player_mai import Playermai
+
 import game_world
 import ending_mode
 
@@ -35,8 +42,24 @@ def init():
     bg = load_image(f'stage_{bg_count}.png')
     global player_r, player_l
 
-    player_r = Playerkk()
-    player_l = Playerkk()
+    if game_framework.get_character_index() == 1:
+        player_r = Playermai()
+    elif game_framework.get_character_index() == 2:
+        player_r = Playerkk()
+    elif game_framework.get_character_index() == 3:
+        player_r = Playerkyo()
+    elif game_framework.get_character_index() == 4:
+        player_r = Playeriori()
+
+    index = randint(1,4)
+    if index == 1:
+        player_l = Playermai()
+    elif index == 2:
+        player_l = Playerkk()
+    elif index == 3:
+        player_l = Playerkyo()
+    elif index == 4:
+        player_l = Playeriori()
 
     player_r.face_dir = 1
     player_l.face_dir = -1
