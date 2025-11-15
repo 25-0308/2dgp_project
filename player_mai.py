@@ -74,23 +74,23 @@ class Skill2:
     def enter(self, e):
         self.player_mai.load_image('mai_skill2_sprite.png')
         self.skill2_frame = 0
-        self.player_mai.y = 300
+        self.player_mai.y = 250
 
     def exit(self, e):
         self.player_mai.y = 200
 
     def do(self):
-        self.skill2_frame = (self.skill2_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time * 3) % 28
-        if self.skill2_frame >= 27:
+        self.skill2_frame = (self.skill2_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time * 2.5) % 20
+        if self.skill2_frame >= 19:
             self.player_mai.state_machine.handle_state_event(('TIMEOUT', None))
 
     def draw(self):
         if self.player_mai.face_dir == 1:
-            self.player_mai.image.clip_composite_draw(217*int(self.skill2_frame), 0, 217, 220, 0, 'h',
-                                                     self.player_mai.x, self.player_mai.y,520,520)
+            self.player_mai.image.clip_composite_draw(166*int(self.skill2_frame), 0, 166, 176, 0, 'h',
+                                                     self.player_mai.x, self.player_mai.y,360,420)
         else:
-            self.player_mai.image.clip_composite_draw(217*int(self.skill2_frame), 0, 217, 220, 0, '0',
-                                                     self.player_mai.x, self.player_mai.y,520,520)
+            self.player_mai.image.clip_composite_draw(166*int(self.skill2_frame), 0, 166, 176, 0, '0',
+                                                     self.player_mai.x, self.player_mai.y,360,420)
 
 class Skill1:
     def __init__(self, mai):
@@ -313,10 +313,10 @@ class Idle:
     def draw(self):
         if self.player_mai.face_dir == 1:
             self.player_mai.image.clip_composite_draw(78 * int(self.idle_frame), 0, 78, 94, 0, 'h',
-                                                     self.player_mai.x, self.player_mai.y,150,300)
+                                                     self.player_mai.x, self.player_mai.y,250,300)
         else:
             self.player_mai.image.clip_composite_draw(78 * int(self.idle_frame), 0, 78, 94, 0, '',
-                                                     self.player_mai.x, self.player_mai.y,150,300)
+                                                     self.player_mai.x, self.player_mai.y,250,300)
 
 class Playermai:
     def __init__(self):
@@ -335,7 +335,7 @@ class Playermai:
         self.PUNCH = Punch(self)
         self.JUMPKICK = Jumpkick(self)
         self.SKILL1 = Skill1(self)
-        # self.SKILL2 = Skill2(self)
+        self.SKILL2 = Skill2(self)
 
         def skill1_command(e):
             if k_down(e) and self.input_buffer == ['DOWN', 'J', 'K']:
@@ -354,6 +354,7 @@ class Playermai:
             {
                 self.IDLE: {right_down: self.RUN, left_down: self.RUN, up_down: self.JUMP,
                             (lambda e: k_down(e) and skill1_command(e)): self.SKILL1,
+                            (lambda e: j_down(e) and skill2_command(e)): self.SKILL2,
                             k_down: self.KICK, j_down: self.PUNCH},
                 self.RUN: {right_up: self.IDLE, left_up: self.IDLE, right_down: self.IDLE,
                            left_down: self.IDLE, up_down: self.JUMP, k_down: self.KICK, j_down: self.PUNCH},
@@ -363,7 +364,7 @@ class Playermai:
                 self.KICK: {time_out: self.IDLE},
                 self.PUNCH: {time_out: self.IDLE},
                 self.SKILL1: {time_out: self.IDLE},
-                # self.SKILL2: {time_out: self.IDLE},
+                self.SKILL2: {time_out: self.IDLE},
             }
         )
 
