@@ -43,7 +43,6 @@ def left_up(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_LEFT
 
 jumpattack_k_frame = 0
-jumpattack_p_frame = 0
 
 PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
 RUN_SPEED_KMPH = 30.0  # Km / Hour
@@ -157,8 +156,6 @@ class Jump:
         global  jumpattack_k_frame
         self.player_kk.dir = 0
         jumpattack_k_frame = self.jump_frame
-        if k_down(e):
-            pass
 
     def do(self):
         self.jump_frame = (self.jump_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time * 3) % 14
@@ -270,7 +267,8 @@ class Playerkk:
                         k_down: self.KICK, j_down: self.PUNCH},
             self.RUN: {right_up: self.IDLE, left_up: self.IDLE, right_down: self.IDLE,
                left_down: self.IDLE, up_down: self.JUMP, k_down: self.KICK, j_down: self.PUNCH},
-            self.JUMP: {time_out: self.IDLE, k_down: self.JUMPKICK},
+            self.JUMP: {time_out: self.IDLE,
+                        (lambda e, jj=self.JUMP: k_down(e) and jj.jump_frame < 7): self.JUMPKICK},
             self.JUMPKICK: {time_out: self.IDLE},
             self.KICK: {time_out: self.IDLE},
             self.PUNCH: {time_out: self.IDLE},
