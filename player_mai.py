@@ -246,19 +246,37 @@ class Run:
 
     def enter(self, e):
         self.run_frame = 0
-        # if right_down(e):
-        #     self.player_mai.dir = 1
-        #     self.player_mai.load_image(f'mai_backwalk_{self.run_frame}.png')
-        if left_down(e):
-            self.player_mai.dir = -1
-            self.player_mai.load_image(f'mai_walk_{self.run_frame}.png')
+        if self.player_mai.face_dir == 1:
+            if right_down(e):
+                self.player_mai.dir = 1
+                self.player_mai.load_image(f'mai_backwalk_{self.run_frame}.png')
+            elif left_down(e):
+                self.player_mai.dir = -1
+                self.player_mai.load_image(f'mai_walk_{self.run_frame}.png')
+        else:
+            if right_down(e):
+                self.player_mai.dir = -1
+                self.player_mai.load_image(f'mai_walk_{self.run_frame}.png')
+            elif left_down(e):
+                self.player_mai.dir = 1
+                self.player_mai.load_image(f'mai_backwalk_{self.run_frame}.png')
+
 
     def exit(self, e):
         pass
 
     def do(self):
         self.run_frame = (self.run_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 6
-        self.player_mai.load_image(f'mai_walk_{int(self.run_frame)}.png')
+        if self.player_mai.face_dir == 1:
+            if self.player_mai.dir == -1:
+                self.player_mai.load_image(f'mai_walk_{int(self.run_frame)}.png')
+            else:
+                self.player_mai.load_image(f'mai_backwalk_{int(self.run_frame)}.png')
+        else:
+            if self.player_mai.dir == 1:
+                self.player_mai.load_image(f'mai_backwalk_{int(self.run_frame)}.png')
+            else:
+                self.player_mai.load_image(f'mai_walk_{int(self.run_frame)}.png')
 
         self.player_mai.x += self.player_mai.dir * RUN_SPEED_PPS * game_framework.frame_time
         if self.player_mai.x < 50:
@@ -268,11 +286,18 @@ class Run:
 
     def draw(self):
         if self.player_mai.face_dir == 1:
+            if self.player_mai.dir == -1:
+                self.player_mai.image.clip_composite_draw(0, 0, 73, 101, 0, 'h',
+                                                     self.player_mai.x, self.player_mai.y,200,300)
+            else:
                 self.player_mai.image.clip_composite_draw(0, 0, 97, 104, 0, 'h',
                                                      self.player_mai.x, self.player_mai.y,200,300)
         else:
             if self.player_mai.dir == 1:
-                self.player_mai.image.clip_composite_draw(0, 0, 97, 104, 0, '0',
+                self.player_mai.image.clip_composite_draw(0, 0, 73, 101, 0, 'h',
+                                                     self.player_mai.x, self.player_mai.y,200,300)
+            else:
+                self.player_mai.image.clip_composite_draw(0, 0, 97, 104, 0, 'h',
                                                      self.player_mai.x, self.player_mai.y,200,300)
 
 class Idle:
