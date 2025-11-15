@@ -6,8 +6,8 @@ import game_framework
 from random import randint
 
 from player_kk import Playerkk
-from Player_iori import Playeriori
-from player_kyo import Playerkyo
+# from Player_iori import Playeriori
+# from player_kyo import Playerkyo
 from player_mai import Playermai
 
 import game_world
@@ -46,20 +46,20 @@ def init():
         player_r = Playermai()
     elif game_framework.get_character_index() == 2:
         player_r = Playerkk()
-    elif game_framework.get_character_index() == 3:
-        player_r = Playerkyo()
-    elif game_framework.get_character_index() == 4:
-        player_r = Playeriori()
+    #elif game_framework.get_character_index() == 3:
+    #   player_r = Playerkyo()
+    #elif game_framework.get_character_index() == 4:
+    #    player_r = Playeriori()
 
-    index = randint(1,4)
+    index = randint(1,2)
     if index == 1:
         player_l = Playermai()
     elif index == 2:
         player_l = Playerkk()
-    elif index == 3:
-        player_l = Playerkyo()
-    elif index == 4:
-        player_l = Playeriori()
+    #elif index == 3:
+    #    player_l = Playerkyo()
+    #elif index == 4:
+    #    player_l = Playeriori()
 
     player_r.face_dir = 1
     player_l.face_dir = -1
