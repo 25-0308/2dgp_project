@@ -185,10 +185,7 @@ class Kick:
 
     def do(self):
         self.kick_frame = (self.kick_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time * 2) % 8
-        if self.player_kk.face_dir == -1:
-            self.player_kk.load_image(f'kk_kick_{int(self.kick_frame)}.png')
-        elif self.player_kk.face_dir == 1:
-            self.player_kk.load_image(f'kk_kick_{int(self.kick_frame)}.png')
+        self.player_kk.load_image(f'kk_kick_{int(self.kick_frame)}.png')
         if self.kick_frame >= 7:
             self.player_kk.state_machine.handle_state_event(('TIMEOUT', None))
 

@@ -171,34 +171,32 @@ def load_resource(path):
 #         else:
 #             self.player_kk.image.clip_composite_draw(0, 0, 131, 119, 0, '0',
 #                                                      self.player_kk.x, self.player_kk.y,340,320)
-#
-# class Kick:
-#     def __init__(self, kk):
-#         self.player_kk = kk
-#         self.kick_frame = 0
-#
-#     def enter(self, e):
-#         self.kick_frame = 0
-#
-#     def exit(self, e):
-#         pass
-#
-#     def do(self):
-#         self.kick_frame = (self.kick_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time * 2) % 8
-#         if self.player_kk.face_dir == -1:
-#             self.player_kk.load_image(f'kk_kick_{int(self.kick_frame)}.png')
-#         elif self.player_kk.face_dir == 1:
-#             self.player_kk.load_image(f'kk_kick_{int(self.kick_frame)}.png')
-#         if self.kick_frame >= 7:
-#             self.player_kk.state_machine.handle_state_event(('TIMEOUT', None))
-#
-#     def draw(self):
-#         if self.player_kk.face_dir == 1:
-#             self.player_kk.image.clip_composite_draw(0, 0, 120, 111, 0, 'h',
-#                                                      self.player_kk.x, self.player_kk.y,300,300)
-#         else:
-#             self.player_kk.image.clip_composite_draw(0, 0, 120, 111, 0, '0',
-#                                                      self.player_kk.x, self.player_kk.y,300,300)
+
+class Kick:
+    def __init__(self, mai):
+        self.player_mai = mai
+        self.kick_frame = 0
+
+    def enter(self, e):
+        self.kick_frame = 0
+
+    def exit(self, e):
+        pass
+
+    def do(self):
+        self.kick_frame = (self.kick_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time * 2) % 8
+        self.player_mai.load_image(f'mai_kick_{int(self.kick_frame)}.png')
+
+        if self.kick_frame >= 7:
+            self.player_mai.state_machine.handle_state_event(('TIMEOUT', None))
+
+    def draw(self):
+        if self.player_mai.face_dir == 1:
+            self.player_mai.image.clip_composite_draw(0, 0, 163, 119, 0, 'h',
+                                                     self.player_mai.x, self.player_mai.y,380,320)
+        else:
+            self.player_mai.image.clip_composite_draw(0, 0, 163, 119, 0, '0',
+                                                     self.player_mai.x, self.player_mai.y,380,320)
 
 class Jump:
     def __init__(self, mai):
@@ -337,7 +335,7 @@ class Playermai:
         self.IDLE = Idle(self)
         self.RUN = Run(self)
         self.JUMP = Jump(self)
-        # self.KICK = Kick(self)
+        self.KICK = Kick(self)
         # self.PUNCH = Punch(self)
         # self.JUMPKICK = Jumpkick(self)
         # self.SKILL1 = Skill1(self)
@@ -359,13 +357,13 @@ class Playermai:
         self.state_machine = StateMachine(
             self.IDLE,
 {
-            self.IDLE: {right_down: self.RUN, left_down: self.RUN,up_down: self.JUMP},
+            self.IDLE: {right_down: self.RUN, left_down: self.RUN,up_down: self.JUMP,k_down: self.KICK},
             self.RUN: {right_up: self.IDLE, left_up: self.IDLE, right_down: self.IDLE,
                left_down: self.IDLE,up_down: self.JUMP},
             self.JUMP: {time_out: self.IDLE},
             #             (lambda e, jj=self.JUMP: k_down(e) and jj.jump_frame < 7): self.JUMPKICK},
             # self.JUMPKICK: {time_out: self.IDLE},
-            # self.KICK: {time_out: self.IDLE},
+            self.KICK: {time_out: self.IDLE},
             # self.PUNCH: {time_out: self.IDLE},
             # self.SKILL1: {time_out: self.IDLE},
             # self.SKILL2: {time_out: self.IDLE},
