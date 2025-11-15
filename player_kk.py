@@ -42,6 +42,8 @@ def left_down(e):
 def left_up(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_LEFT
 
+jumpattack_k_frame = 0
+jumpattack_p_frame = 0
 
 PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
 RUN_SPEED_KMPH = 30.0  # Km / Hour
@@ -58,6 +60,32 @@ def load_resource(path):
     base_dir = os.path.dirname(__file__)
     abs_path = os.path.join(base_dir, 'kk', path)
     return load_image(abs_path)
+
+class Jumpkick:
+    def __init__(self, kk):
+        self.player_kk = kk
+        self.jumpkick_frame = 0
+
+    def enter(self, e):
+        global jumpattack_k_frame
+        self.player_kk.load_image('kk_jumpattack_sprite.png')
+        self.jumpkick_frame = jumpattack_k_frame
+
+    def exit(self, e):
+        self.player_kk.y = 200
+
+    def do(self):
+        self.jumpkick_frame = (self.jumpkick_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time * 3) % 17
+        if self.jumpkick_frame >= 16:
+            self.player_kk.state_machine.handle_state_event(('TIMEOUT', None))
+
+    def draw(self):
+        if self.player_kk.face_dir == 1:
+            self.player_kk.image.clip_composite_draw(113*int(self.jumpkick_frame), 0, 113, 193, 0, 'h',
+                                                     self.player_kk.x, self.player_kk.y,300,500)
+        else:
+            self.player_kk.image.clip_composite_draw(113*int(self.jumpkick_frame), 0, 113, 193, 0, '0',
+                                                     self.player_kk.x, self.player_kk.y,300,500)
 
 class Punch:
     def __init__(self, kk):
@@ -126,7 +154,11 @@ class Jump:
 
 
     def exit(self, e):
+        global  jumpattack_k_frame
         self.player_kk.dir = 0
+        jumpattack_k_frame = self.jump_frame
+        if k_down(e):
+            pass
 
     def do(self):
         self.jump_frame = (self.jump_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time * 3) % 14
@@ -229,6 +261,7 @@ class Playerkk:
         self.JUMP = Jump(self)
         self.KICK = Kick(self)
         self.PUNCH = Punch(self)
+        self.JUMPKICK = Jumpkick(self)
 
         self.state_machine = StateMachine(
             self.IDLE,
@@ -237,7 +270,8 @@ class Playerkk:
                         k_down: self.KICK, j_down: self.PUNCH},
             self.RUN: {right_up: self.IDLE, left_up: self.IDLE, right_down: self.IDLE,
                left_down: self.IDLE, up_down: self.JUMP, k_down: self.KICK, j_down: self.PUNCH},
-            self.JUMP: {time_out: self.IDLE},
+            self.JUMP: {time_out: self.IDLE, k_down: self.JUMPKICK},
+            self.JUMPKICK: {time_out: self.IDLE},
             self.KICK: {time_out: self.IDLE},
             self.PUNCH: {time_out: self.IDLE},
             }
