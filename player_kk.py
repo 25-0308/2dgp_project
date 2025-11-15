@@ -1,4 +1,4 @@
-from pico2d import load_image, get_time, load_font, draw_rectangle, pico2d_image_loader
+from pico2d import load_image, draw_rectangle
 from sdl2 import SDL_KEYDOWN, SDLK_RIGHT, SDL_KEYUP, SDLK_LEFT, SDLK_UP, SDLK_k, SDLK_j, SDLK_DOWN
 import os
 
@@ -65,6 +65,32 @@ def load_resource(path):
     base_dir = os.path.dirname(__file__)
     abs_path = os.path.join(base_dir, 'kk', path)
     return load_image(abs_path)
+
+class Skill2:
+    def __init__(self, kk):
+        self.player_kk = kk
+        self.skill2_frame = 0
+
+    def enter(self, e):
+        self.player_kk.load_image('kk_skill2_sprite.png')
+        self.skill2_frame = 0
+        self.player_kk.y = 300
+
+    def exit(self, e):
+        self.player_kk.y = 200
+
+    def do(self):
+        self.skill2_frame = (self.skill2_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time * 3) % 28
+        if self.skill2_frame >= 27:
+            self.player_kk.state_machine.handle_state_event(('TIMEOUT', None))
+
+    def draw(self):
+        if self.player_kk.face_dir == 1:
+            self.player_kk.image.clip_composite_draw(217*int(self.skill2_frame), 0, 217, 220, 0, 'h',
+                                                     self.player_kk.x, self.player_kk.y,520,520)
+        else:
+            self.player_kk.image.clip_composite_draw(217*int(self.skill2_frame), 0, 217, 220, 0, '0',
+                                                     self.player_kk.x, self.player_kk.y,520,520)
 
 class Skill1:
     def __init__(self, kk):
@@ -294,6 +320,7 @@ class Playerkk:
         self.PUNCH = Punch(self)
         self.JUMPKICK = Jumpkick(self)
         self.SKILL1 = Skill1(self)
+        self.SKILL2 = Skill2(self)
 
         def skill1_command(e):
             if k_down(e) and self.input_buffer == ['DOWN', 'J', 'K']:
@@ -302,10 +329,10 @@ class Playerkk:
             return False
 
         def skill2_command(e):
-            if j_down(e) and self.input_buffer == ['DOWN', 'K', 'J']:
+            if j_down(e) and self.input_buffer == ['DOWN', 'JUMP', 'J']:
                 self.input_buffer = []
                 return True
-            self.input_buffer = []
+            return False
 
 
         self.state_machine = StateMachine(
@@ -313,6 +340,7 @@ class Playerkk:
 {
             self.IDLE: {right_down: self.RUN, left_down: self.RUN, up_down: self.JUMP,
                         (lambda e: k_down(e) and skill1_command(e)):self.SKILL1,
+                        (lambda e: j_down(e) and skill2_command(e)):self.SKILL2,
                         k_down: self.KICK, j_down: self.PUNCH},
             self.RUN: {right_up: self.IDLE, left_up: self.IDLE, right_down: self.IDLE,
                left_down: self.IDLE, up_down: self.JUMP, k_down: self.KICK, j_down: self.PUNCH},
@@ -322,6 +350,7 @@ class Playerkk:
             self.KICK: {time_out: self.IDLE},
             self.PUNCH: {time_out: self.IDLE},
             self.SKILL1: {time_out: self.IDLE},
+            self.SKILL2: {time_out: self.IDLE},
             }
         )
 
@@ -340,16 +369,21 @@ class Playerkk:
                 name = 'J'
             elif event.key == SDLK_k:
                 name = 'K'
+            elif event.key == SDLK_UP:
+                name = 'JUMP'
             else:
                 name = None
 
             if name :
                 self.input_buffer.append(name)
-                if len(self.input_buffer) > 3:
+                if len(self.input_buffer) > 3 and self.input_buffer[2]=='K':
                     self.input_buffer.clear()
                     self.state_machine.handle_state_event(('SKILL1_INPUT',event))
                     return
-
+                elif len(self.input_buffer) > 3 and self.input_buffer[2] == 'J':
+                    self.input_buffer.clear()
+                    self.state_machine.handle_state_event(('SKILL2_INPUT', event))
+                    return
         self.state_machine.handle_state_event(('INPUT', event))
 
     def draw(self):
