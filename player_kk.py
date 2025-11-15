@@ -299,6 +299,12 @@ class Playerkk:
             if k_down(e) and self.input_buffer == ['DOWN', 'J', 'K']:
                 self.input_buffer = []
                 return True
+            return False
+
+        def skill2_command(e):
+            if j_down(e) and self.input_buffer == ['DOWN', 'K', 'J']:
+                self.input_buffer = []
+                return True
             self.input_buffer = []
 
 
@@ -328,6 +334,7 @@ class Playerkk:
     def handle_event(self, event):
         if event.type == SDL_KEYDOWN:
             if event.key == SDLK_DOWN:
+                self.input_buffer = []
                 name = 'DOWN'
             elif event.key == SDLK_j:
                 name = 'J'
