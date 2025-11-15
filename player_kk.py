@@ -299,7 +299,7 @@ class Playerkk:
             if k_down(e) and self.input_buffer == ['DOWN', 'J', 'K']:
                 self.input_buffer = []
                 return True
-            return False
+            self.input_buffer = []
 
 
         self.state_machine = StateMachine(
