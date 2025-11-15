@@ -1,5 +1,5 @@
 from pico2d import load_image, get_time, load_font, draw_rectangle, pico2d_image_loader
-from sdl2 import SDL_KEYDOWN, SDLK_RIGHT, SDL_KEYUP, SDLK_LEFT, SDLK_UP, SDLK_k, SDLK_j
+from sdl2 import SDL_KEYDOWN, SDLK_RIGHT, SDL_KEYUP, SDLK_LEFT, SDLK_UP, SDLK_k, SDLK_j, SDLK_DOWN
 import os
 
 
@@ -42,6 +42,12 @@ def left_down(e):
 def left_up(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_LEFT
 
+def down_down(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_DOWN
+
+def down_up(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_DOWN
+
 jumpattack_k_frame = 0
 
 PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
@@ -59,6 +65,32 @@ def load_resource(path):
     base_dir = os.path.dirname(__file__)
     abs_path = os.path.join(base_dir, 'kk', path)
     return load_image(abs_path)
+
+class Skill1:
+    def __init__(self, kk):
+        self.player_kk = kk
+        self.skill1_frame = 0
+
+    def enter(self, e):
+        self.player_kk.load_image('kk_skill1_sprite.png')
+        self.skill1_frame = 0
+        self.player_kk.y = 300
+
+    def exit(self, e):
+        self.player_kk.y = 200
+
+    def do(self):
+        self.skill1_frame = (self.skill1_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time * 3) % 30
+        if self.skill1_frame >= 29:
+            self.player_kk.state_machine.handle_state_event(('TIMEOUT', None))
+
+    def draw(self):
+        if self.player_kk.face_dir == 1:
+            self.player_kk.image.clip_composite_draw(155*int(self.skill1_frame), 0, 155, 245, 0, 'h',
+                                                     self.player_kk.x, self.player_kk.y,400,600)
+        else:
+            self.player_kk.image.clip_composite_draw(155*int(self.skill1_frame), 0, 155, 245, 0, '0',
+                                                     self.player_kk.x, self.player_kk.y,400,600)
 
 class Jumpkick:
     def __init__(self, kk):
@@ -253,17 +285,28 @@ class Playerkk:
         self.dir = 0
         self.load_image(f'kk_idle_{self.frame}.png')
 
+        self.input_buffer = []
+
         self.IDLE = Idle(self)
         self.RUN = Run(self)
         self.JUMP = Jump(self)
         self.KICK = Kick(self)
         self.PUNCH = Punch(self)
         self.JUMPKICK = Jumpkick(self)
+        self.SKILL1 = Skill1(self)
+
+        def skill1_command(e):
+            if k_down(e) and self.input_buffer == ['DOWN', 'J', 'K']:
+                self.input_buffer = []
+                return True
+            return False
+
 
         self.state_machine = StateMachine(
             self.IDLE,
 {
             self.IDLE: {right_down: self.RUN, left_down: self.RUN, up_down: self.JUMP,
+                        (lambda e: k_down(e) and skill1_command(e)):self.SKILL1,
                         k_down: self.KICK, j_down: self.PUNCH},
             self.RUN: {right_up: self.IDLE, left_up: self.IDLE, right_down: self.IDLE,
                left_down: self.IDLE, up_down: self.JUMP, k_down: self.KICK, j_down: self.PUNCH},
@@ -272,6 +315,7 @@ class Playerkk:
             self.JUMPKICK: {time_out: self.IDLE},
             self.KICK: {time_out: self.IDLE},
             self.PUNCH: {time_out: self.IDLE},
+            self.SKILL1: {time_out: self.IDLE},
             }
         )
 
@@ -282,6 +326,23 @@ class Playerkk:
         self.state_machine.update()
 
     def handle_event(self, event):
+        if event.type == SDL_KEYDOWN:
+            if event.key == SDLK_DOWN:
+                name = 'DOWN'
+            elif event.key == SDLK_j:
+                name = 'J'
+            elif event.key == SDLK_k:
+                name = 'K'
+            else:
+                name = None
+
+            if name :
+                self.input_buffer.append(name)
+                if len(self.input_buffer) > 3:
+                    self.input_buffer.clear()
+                    self.state_machine.handle_state_event(('SKILL1_INPUT',event))
+                    return
+
         self.state_machine.handle_state_event(('INPUT', event))
 
     def draw(self):
