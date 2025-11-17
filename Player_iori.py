@@ -167,32 +167,33 @@ def load_resource(path):
 #         else:
 #             self.player_mai.image.clip_composite_draw(0, 0, 163, 119, 0, '0',
 #                                                      self.player_mai.x, self.player_mai.y,380,320)
-#
-# class Kick:
-#     def __init__(self, mai):
-#         self.player_mai = mai
-#         self.kick_frame = 0
-#
-#     def enter(self, e):
-#         self.kick_frame = 0
-#
-#     def exit(self, e):
-#         pass
-#
-#     def do(self):
-#         self.kick_frame = (self.kick_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time * 2) % 8
-#         self.player_mai.load_image(f'mai_kick_{int(self.kick_frame)}.png')
-#
-#         if self.kick_frame >= 7:
-#             self.player_mai.state_machine.handle_state_event(('TIMEOUT', None))
-#
-#     def draw(self):
-#         if self.player_mai.face_dir == 1:
-#             self.player_mai.image.clip_composite_draw(0, 0, 163, 119, 0, 'h',
-#                                                      self.player_mai.x, self.player_mai.y,380,320)
-#         else:
-#             self.player_mai.image.clip_composite_draw(0, 0, 163, 119, 0, '0',
-#                                                      self.player_mai.x, self.player_mai.y,380,320)
+
+class Kick:
+    def __init__(self, iori):
+        self.player_iori = iori
+        self.kick_frame = 0
+
+    def enter(self, e):
+        self.kick_frame = 0
+        self.player_iori.y = 250
+
+    def exit(self, e):
+        self.player_iori.y = 200
+
+    def do(self):
+        self.kick_frame = (self.kick_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time * 3) % 15
+        self.player_iori.load_image(f'iori_kick_sprite.png')
+
+        if self.kick_frame >= 14:
+            self.player_iori.state_machine.handle_state_event(('TIMEOUT', None))
+
+    def draw(self):
+        if self.player_iori.face_dir == 1:
+            self.player_iori.image.clip_composite_draw(137 * int(self.kick_frame), 0, 137, 135, 0, 'h',
+                                                     self.player_iori.x, self.player_iori.y,390,380)
+        else:
+            self.player_iori.image.clip_composite_draw(137 * int(self.kick_frame), 0, 137, 135, 0, '0',
+                                                     self.player_iori.x, self.player_iori.y,390,380)
 
 class Jump:
     def __init__(self, iori):
@@ -210,7 +211,7 @@ class Jump:
         jumpattack_k_frame = self.jump_frame
 
     def do(self):
-        self.jump_frame = (self.jump_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time * 3) % 14
+        self.jump_frame = (self.jump_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time * 3) % 13
 
         self.player_iori.load_image(f'iori_jump_sprite.png')
 
@@ -221,7 +222,7 @@ class Jump:
         elif self.player_iori.x > 1230:
             self.player_iori.x = 1230
 
-        if self.jump_frame >= 13:
+        if self.jump_frame >= 12:
             self.player_iori.y = 200
             self.player_iori.state_machine.handle_state_event(('TIMEOUT', None))
 
@@ -331,6 +332,7 @@ class Playeriori:
         self.IDLE = Idle(self)
         self.RUN = Run(self)
         self.JUMP = Jump(self)
+        self.KICK = Kick(self)
 
         def skill1_command(e):
             if k_down(e) and self.input_buffer == ['DOWN', 'J', 'K']:
@@ -347,10 +349,11 @@ class Playeriori:
         self.state_machine = StateMachine(
             self.IDLE,
             {
-                self.IDLE: {right_down: self.RUN, left_down: self.RUN, up_down: self.JUMP},
+                self.IDLE: {right_down: self.RUN, left_down: self.RUN, up_down: self.JUMP,k_down: self.KICK},
                 self.RUN: {right_up: self.IDLE, left_up: self.IDLE, right_down: self.IDLE,
                            left_down: self.IDLE},
-                self.JUMP: {time_out: self.IDLE}
+                self.JUMP: {time_out: self.IDLE},
+                self.KICK: {time_out: self.IDLE},
             }
         )
 
