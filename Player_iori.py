@@ -232,67 +232,67 @@ def load_resource(path):
 #         else:
 #             self.player_mai.image.clip_composite_draw(84 * int(self.jump_frame), 0, 84, 201, 0, '0',
 #                                                      self.player_mai.x, self.player_mai.y,180,600)
-#
-# class Run:
-#     def __init__(self, mai):
-#         self.player_mai = mai
-#         self.run_frame = 0
-#
-#     def enter(self, e):
-#         self.run_frame = 0
-#         if self.player_mai.face_dir == 1:
-#             if right_down(e):
-#                 self.player_mai.dir = 1
-#                 self.player_mai.load_image(f'mai_backwalk_{self.run_frame}.png')
-#             elif left_down(e):
-#                 self.player_mai.dir = -1
-#                 self.player_mai.load_image(f'mai_walk_{self.run_frame}.png')
-#         else:
-#             if right_down(e):
-#                 self.player_mai.dir = -1
-#                 self.player_mai.load_image(f'mai_walk_{self.run_frame}.png')
-#             elif left_down(e):
-#                 self.player_mai.dir = 1
-#                 self.player_mai.load_image(f'mai_backwalk_{self.run_frame}.png')
-#
-#
-#     def exit(self, e):
-#         pass
-#
-#     def do(self):
-#         self.run_frame = (self.run_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 6
-#         if self.player_mai.face_dir == 1:
-#             if self.player_mai.dir == -1:
-#                 self.player_mai.load_image(f'mai_walk_{int(self.run_frame)}.png')
-#             else:
-#                 self.player_mai.load_image(f'mai_backwalk_{int(self.run_frame)}.png')
-#         else:
-#             if self.player_mai.dir == 1:
-#                 self.player_mai.load_image(f'mai_backwalk_{int(self.run_frame)}.png')
-#             else:
-#                 self.player_mai.load_image(f'mai_walk_{int(self.run_frame)}.png')
-#
-#         self.player_mai.x += self.player_mai.dir * RUN_SPEED_PPS * game_framework.frame_time
-#         if self.player_mai.x < 50:
-#             self.player_mai.x = 5
-#         elif self.player_mai.x > 1230:
-#             self.player_mai.x = 1230
-#
-#     def draw(self):
-#         if self.player_mai.face_dir == 1:
-#             if self.player_mai.dir == -1:
-#                 self.player_mai.image.clip_composite_draw(0, 0, 73, 101, 0, 'h',
-#                                                      self.player_mai.x, self.player_mai.y,200,300)
-#             else:
-#                 self.player_mai.image.clip_composite_draw(0, 0, 97, 104, 0, 'h',
-#                                                      self.player_mai.x, self.player_mai.y,200,300)
-#         else:
-#             if self.player_mai.dir == 1:
-#                 self.player_mai.image.clip_composite_draw(0, 0, 73, 101, 0, 'h',
-#                                                      self.player_mai.x, self.player_mai.y,200,300)
-#             else:
-#                 self.player_mai.image.clip_composite_draw(0, 0, 97, 104, 0, 'h',
-#                                                      self.player_mai.x, self.player_mai.y,200,300)
+
+class Run:
+    def __init__(self, iori):
+        self.player_iori = iori
+        self.run_frame = 0
+
+    def enter(self, e):
+        self.run_frame = 0
+        if self.player_iori.face_dir == 1:
+            if right_down(e):
+                self.player_iori.dir = 1
+                self.player_iori.load_image(f'iori_backwalk_sprite.png')
+            elif left_down(e):
+                self.player_iori.dir = -1
+                self.player_iori.load_image(f'iori_walk_sprite.png')
+        else:
+            if right_down(e):
+                self.player_iori.dir = -1
+                self.player_iori.load_image(f'iori_walk_sprite.png')
+            elif left_down(e):
+                self.player_iori.dir = 1
+                self.player_iori.load_image(f'iori_backwalk_sprite.png')
+
+
+    def exit(self, e):
+        pass
+
+    def do(self):
+        self.run_frame = (self.run_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 10
+        if self.player_iori.face_dir == 1:
+            if self.player_iori.dir == -1:
+                self.player_iori.load_image(f'iori_walk_sprite.png')
+            else:
+                self.player_iori.load_image(f'iori_backwalk_sprite.png')
+        else:
+            if self.player_iori.dir == 1:
+                self.player_iori.load_image(f'iori_backwalk_sprite.png')
+            else:
+                self.player_iori.load_image(f'iori_walk_sprite.png')
+
+        self.player_iori.x += self.player_iori.dir * RUN_SPEED_PPS * game_framework.frame_time
+        if self.player_iori.x < 50:
+            self.player_iori.x = 5
+        elif self.player_iori.x > 1230:
+            self.player_iori.x = 1230
+
+    def draw(self):
+        if self.player_iori.face_dir == 1:
+            if self.player_iori.dir == -1:
+                self.player_iori.image.clip_composite_draw(68 * int(self.run_frame), 0, 68, 104, 0, 'h',
+                                                     self.player_iori.x, self.player_iori.y,200,300)
+            else:
+                self.player_iori.image.clip_composite_draw(70 * int(self.run_frame), 0, 70, 107, 0, 'h',
+                                                     self.player_iori.x, self.player_iori.y,200,300)
+        else:
+            if self.player_iori.dir == 1:
+                self.player_iori.image.clip_composite_draw(68 * int(self.run_frame), 0, 68, 104, 0, 'h',
+                                                     self.player_iori.x, self.player_iori.y,200,300)
+            else:
+                self.player_iori.image.clip_composite_draw(70 * int(self.run_frame), 0, 70, 107, 0, 'h',
+                                                     self.player_iori.x, self.player_iori.y,200,300)
 
 class Idle:
     def __init__(self, iori):
@@ -308,7 +308,7 @@ class Idle:
         pass
 
     def do(self):
-        self.idle_frame = (self.idle_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time*1.5) % 9
+        self.idle_frame = (self.idle_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 9
 
     def draw(self):
         if self.player_iori.face_dir == 1:
@@ -329,6 +329,7 @@ class Playeriori:
         self.input_buffer = []
 
         self.IDLE = Idle(self)
+        self.RUN = Run(self)
 
         def skill1_command(e):
             if k_down(e) and self.input_buffer == ['DOWN', 'J', 'K']:
@@ -345,7 +346,9 @@ class Playeriori:
         self.state_machine = StateMachine(
             self.IDLE,
             {
-                self.IDLE: {},
+                self.IDLE: {right_down: self.RUN, left_down: self.RUN},
+                self.RUN: {right_up: self.IDLE, left_up: self.IDLE, right_down: self.IDLE,
+                           left_down: self.IDLE},
             }
         )
 
