@@ -193,45 +193,45 @@ def load_resource(path):
 #         else:
 #             self.player_mai.image.clip_composite_draw(0, 0, 163, 119, 0, '0',
 #                                                      self.player_mai.x, self.player_mai.y,380,320)
-#
-# class Jump:
-#     def __init__(self, mai):
-#         self.player_mai = mai
-#         self.jump_frame = 0
-#
-#     def enter(self, e):
-#         self.jump_frame = 0
-#         self.player_mai.y = 350
-#
-#
-#     def exit(self, e):
-#         global  jumpattack_k_frame
-#         self.player_mai.dir = 0
-#         jumpattack_k_frame = self.jump_frame
-#
-#     def do(self):
-#         self.jump_frame = (self.jump_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time * 3) % 14
-#
-#         self.player_mai.load_image(f'mai_jump_sprite.png')
-#
-#         self.player_mai.x += self.player_mai.dir * RUN_SPEED_PPS * game_framework.frame_time
-#
-#         if self.player_mai.x < 50:
-#             self.player_mai.x = 50
-#         elif self.player_mai.x > 1230:
-#             self.player_mai.x = 1230
-#
-#         if self.jump_frame >= 13:
-#             self.player_mai.y = 200
-#             self.player_mai.state_machine.handle_state_event(('TIMEOUT', None))
-#
-#     def draw(self):
-#         if self.player_mai.face_dir == 1:
-#             self.player_mai.image.clip_composite_draw(84 * int(self.jump_frame), 0, 84, 210, 0, 'h',
-#                                                      self.player_mai.x, self.player_mai.y,180,600)
-#         else:
-#             self.player_mai.image.clip_composite_draw(84 * int(self.jump_frame), 0, 84, 201, 0, '0',
-#                                                      self.player_mai.x, self.player_mai.y,180,600)
+
+class Jump:
+    def __init__(self, iori):
+        self.player_iori = iori
+        self.jump_frame = 0
+
+    def enter(self, e):
+        self.jump_frame = 0
+        self.player_iori.y = 350
+
+
+    def exit(self, e):
+        global  jumpattack_k_frame
+        self.player_iori.dir = 0
+        jumpattack_k_frame = self.jump_frame
+
+    def do(self):
+        self.jump_frame = (self.jump_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time * 3) % 14
+
+        self.player_iori.load_image(f'iori_jump_sprite.png')
+
+        self.player_iori.x += self.player_iori.dir * RUN_SPEED_PPS * game_framework.frame_time
+
+        if self.player_iori.x < 50:
+            self.player_iori.x = 50
+        elif self.player_iori.x > 1230:
+            self.player_iori.x = 1230
+
+        if self.jump_frame >= 13:
+            self.player_iori.y = 200
+            self.player_iori.state_machine.handle_state_event(('TIMEOUT', None))
+
+    def draw(self):
+        if self.player_iori.face_dir == 1:
+            self.player_iori.image.clip_composite_draw(68 * int(self.jump_frame), 0, 68, 190, 0, 'h',
+                                                     self.player_iori.x, self.player_iori.y,180,600)
+        else:
+            self.player_iori.image.clip_composite_draw(68 * int(self.jump_frame), 0, 68, 190, 0, '0',
+                                                     self.player_iori.x, self.player_iori.y,180,600)
 
 class Run:
     def __init__(self, iori):
@@ -260,7 +260,7 @@ class Run:
         pass
 
     def do(self):
-        self.run_frame = (self.run_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 10
+        self.run_frame = (self.run_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 9
         if self.player_iori.face_dir == 1:
             if self.player_iori.dir == -1:
                 self.player_iori.load_image(f'iori_walk_sprite.png')
@@ -330,6 +330,7 @@ class Playeriori:
 
         self.IDLE = Idle(self)
         self.RUN = Run(self)
+        self.JUMP = Jump(self)
 
         def skill1_command(e):
             if k_down(e) and self.input_buffer == ['DOWN', 'J', 'K']:
@@ -346,9 +347,10 @@ class Playeriori:
         self.state_machine = StateMachine(
             self.IDLE,
             {
-                self.IDLE: {right_down: self.RUN, left_down: self.RUN},
+                self.IDLE: {right_down: self.RUN, left_down: self.RUN, up_down: self.JUMP},
                 self.RUN: {right_up: self.IDLE, left_up: self.IDLE, right_down: self.IDLE,
                            left_down: self.IDLE},
+                self.JUMP: {time_out: self.IDLE}
             }
         )
 
