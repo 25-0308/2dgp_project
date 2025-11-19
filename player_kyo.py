@@ -67,85 +67,85 @@ def load_resource(path):
     return load_image(abs_path)
 
 class Skill2:
-    def __init__(self, mai):
-        self.player_mai = mai
+    def __init__(self, kyo):
+        self.player_kyo = kyo
         self.skill2_frame = 0
 
     def enter(self, e):
-        self.player_mai.load_image('mai_skill2_sprite.png')
+        self.player_kyo.load_image('kyo_skill2_sprite.png')
         self.skill2_frame = 0
-        self.player_mai.y = 250
+        self.player_kyo.y = 250
 
     def exit(self, e):
-        self.player_mai.y = 200
+        self.player_kyo.y = 200
 
     def do(self):
         self.skill2_frame = (self.skill2_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time * 2.5) % 20
         if self.skill2_frame >= 19:
-            self.player_mai.state_machine.handle_state_event(('TIMEOUT', None))
+            self.player_kyo.state_machine.handle_state_event(('TIMEOUT', None))
 
     def draw(self):
-        if self.player_mai.face_dir == 1:
-            self.player_mai.image.clip_composite_draw(166*int(self.skill2_frame), 0, 166, 176, 0, 'h',
-                                                     self.player_mai.x, self.player_mai.y,360,420)
+        if self.player_kyo.face_dir == 1:
+            self.player_kyo.image.clip_composite_draw(166*int(self.skill2_frame), 0, 166, 176, 0, 'h',
+                                                     self.player_kyo.x, self.player_kyo.y,360,420)
         else:
-            self.player_mai.image.clip_composite_draw(166*int(self.skill2_frame), 0, 166, 176, 0, '0',
-                                                     self.player_mai.x, self.player_mai.y,360,420)
+            self.player_kyo.image.clip_composite_draw(166*int(self.skill2_frame), 0, 166, 176, 0, '0',
+                                                     self.player_kyo.x, self.player_kyo.y,360,420)
 
 class Skill1:
-    def __init__(self, mai):
-        self.player_mai = mai
+    def __init__(self, kyo):
+        self.player_kyo = kyo
         self.skill1_frame = 0
 
     def enter(self, e):
-        self.player_mai.load_image('mai_skill1_sprite.png')
+        self.player_kyo.load_image('kyo_skill1_sprite.png')
         self.skill1_frame = 0
 
     def exit(self, e):
-        self.player_mai.y = 200
+        self.player_kyo.y = 200
 
     def do(self):
         self.skill1_frame = (self.skill1_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time * 3) % 18
         if self.skill1_frame >= 17:
-            self.player_mai.state_machine.handle_state_event(('TIMEOUT', None))
+            self.player_kyo.state_machine.handle_state_event(('TIMEOUT', None))
 
     def draw(self):
-        if self.player_mai.face_dir == 1:
-            self.player_mai.image.clip_composite_draw(177*int(self.skill1_frame), 0, 177, 114, 0, 'h',
-                                                     self.player_mai.x, self.player_mai.y,400,320)
+        if self.player_kyo.face_dir == 1:
+            self.player_kyo.image.clip_composite_draw(177*int(self.skill1_frame), 0, 177, 114, 0, 'h',
+                                                     self.player_kyo.x, self.player_kyo.y,400,320)
         else:
-            self.player_mai.image.clip_composite_draw(177*int(self.skill1_frame), 0, 177, 114, 0, '0',
-                                                     self.player_mai.x, self.player_mai.y,400,320)
+            self.player_kyo.image.clip_composite_draw(177*int(self.skill1_frame), 0, 177, 114, 0, '0',
+                                                     self.player_kyo.x, self.player_kyo.y,400,320)
 
 class Jumpkick:
-    def __init__(self, mai):
-        self.player_mai = mai
+    def __init__(self, kyo):
+        self.player_kyo = kyo
         self.jumpkick_frame = 0
 
     def enter(self, e):
         global jumpattack_k_frame
-        self.player_mai.load_image('mai_jumpattack_sprite.png')
+        self.player_kyo.load_image('kyo_jumpattack_sprite.png')
         self.jumpkick_frame = jumpattack_k_frame
 
     def exit(self, e):
-        self.player_mai.y = 200
+        self.player_kyo.y = 200
 
     def do(self):
         self.jumpkick_frame = (self.jumpkick_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time * 2.5) % 14
         if self.jumpkick_frame >= 13:
-            self.player_mai.state_machine.handle_state_event(('TIMEOUT', None))
+            self.player_kyo.state_machine.handle_state_event(('TIMEOUT', None))
 
     def draw(self):
-        if self.player_mai.face_dir == 1:
-            self.player_mai.image.clip_composite_draw(140*int(self.jumpkick_frame), 0, 140, 209, 0, 'h',
-                                                     self.player_mai.x, self.player_mai.y,350,500)
+        if self.player_kyo.face_dir == 1:
+            self.player_kyo.image.clip_composite_draw(140*int(self.jumpkick_frame), 0, 140, 209, 0, 'h',
+                                                     self.player_kyo.x, self.player_kyo.y,350,500)
         else:
-            self.player_mai.image.clip_composite_draw(140*int(self.jumpkick_frame), 0, 140, 209, 0, '0',
-                                                     self.player_mai.x, self.player_mai.y,350,500)
+            self.player_kyo.image.clip_composite_draw(140*int(self.jumpkick_frame), 0, 140, 209, 0, '0',
+                                                     self.player_kyo.x, self.player_kyo.y,350,500)
 
 class Punch:
-    def __init__(self, mai):
-        self.player_mai = mai
+    def __init__(self, kyo):
+        self.player_kyo = kyo
         self.punch_frame = 0
 
     def enter(self, e):
@@ -156,21 +156,21 @@ class Punch:
 
     def do(self):
         self.punch_frame = (self.punch_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time * 1.5) % 6
-        self.player_mai.load_image(f'mai_punch_{int(self.punch_frame)}.png')
+        self.player_kyo.load_image(f'kyo_punch_{int(self.punch_frame)}.png')
         if self.punch_frame >= 5:
-            self.player_mai.state_machine.handle_state_event(('TIMEOUT', None))
+            self.player_kyo.state_machine.handle_state_event(('TIMEOUT', None))
 
     def draw(self):
-        if self.player_mai.face_dir == 1:
-            self.player_mai.image.clip_composite_draw(0, 0, 163, 119, 0, 'h',
-                                                     self.player_mai.x, self.player_mai.y,380,320)
+        if self.player_kyo.face_dir == 1:
+            self.player_kyo.image.clip_composite_draw(0, 0, 163, 119, 0, 'h',
+                                                     self.player_kyo.x, self.player_kyo.y,380,320)
         else:
-            self.player_mai.image.clip_composite_draw(0, 0, 163, 119, 0, '0',
-                                                     self.player_mai.x, self.player_mai.y,380,320)
+            self.player_kyo.image.clip_composite_draw(0, 0, 163, 119, 0, '0',
+                                                     self.player_kyo.x, self.player_kyo.y,380,320)
 
 class Kick:
-    def __init__(self, mai):
-        self.player_mai = mai
+    def __init__(self, kyo):
+        self.player_kyo = kyo
         self.kick_frame = 0
 
     def enter(self, e):
@@ -180,19 +180,19 @@ class Kick:
         pass
 
     def do(self):
-        self.kick_frame = (self.kick_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time * 2) % 8
-        self.player_mai.load_image(f'mai_kick_{int(self.kick_frame)}.png')
+        self.kick_frame = (self.kick_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time * 1.5) % 6
+        self.player_kyo.load_image(f'kyo_kick_sprite.png')
 
-        if self.kick_frame >= 7:
-            self.player_mai.state_machine.handle_state_event(('TIMEOUT', None))
+        if self.kick_frame >= 5:
+            self.player_kyo.state_machine.handle_state_event(('TIMEOUT', None))
 
     def draw(self):
-        if self.player_mai.face_dir == 1:
-            self.player_mai.image.clip_composite_draw(0, 0, 163, 119, 0, 'h',
-                                                     self.player_mai.x, self.player_mai.y,380,320)
+        if self.player_kyo.face_dir == 1:
+            self.player_kyo.image.clip_composite_draw(134*int(self.kick_frame), 0, 134, 113, 0, 'h',
+                                                     self.player_kyo.x, self.player_kyo.y,350,320)
         else:
-            self.player_mai.image.clip_composite_draw(0, 0, 163, 119, 0, '0',
-                                                     self.player_mai.x, self.player_mai.y,380,320)
+            self.player_kyo.image.clip_composite_draw(134*int(self.kick_frame), 0, 134, 113, 0, '0',
+                                                     self.player_kyo.x, self.player_kyo.y,350,320)
 
 class Jump:
     def __init__(self, kyo):
@@ -329,6 +329,7 @@ class Playerkyo:
         self.IDLE = Idle(self)
         self.RUN = Run(self)
         self.JUMP = Jump(self)
+        self.KICK = Kick(self)
 
         def skill1_command(e):
             if k_down(e) and self.input_buffer == ['DOWN', 'J', 'K']:
@@ -345,9 +346,10 @@ class Playerkyo:
         self.state_machine = StateMachine(
             self.IDLE,
             {
-                self.IDLE:  {right_down: self.RUN, left_down: self.RUN, up_down: self.JUMP},
+                self.IDLE:  {right_down: self.RUN, left_down: self.RUN, up_down: self.JUMP,k_down: self.KICK},
                 self.RUN:   {right_up: self.IDLE, left_up: self.IDLE},
                 self.JUMP:  {time_out: self.IDLE},
+                self.KICK:  {time_out: self.IDLE},
             }
         )
 
