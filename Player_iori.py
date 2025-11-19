@@ -91,31 +91,38 @@ def load_resource(path):
 #         else:
 #             self.player_mai.image.clip_composite_draw(166*int(self.skill2_frame), 0, 166, 176, 0, '0',
 #                                                      self.player_mai.x, self.player_mai.y,360,420)
-#
-# class Skill1:
-#     def __init__(self, mai):
-#         self.player_mai = mai
-#         self.skill1_frame = 0
-#
-#     def enter(self, e):
-#         self.player_mai.load_image('mai_skill1_sprite.png')
-#         self.skill1_frame = 0
-#
-#     def exit(self, e):
-#         self.player_mai.y = 200
-#
-#     def do(self):
-#         self.skill1_frame = (self.skill1_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time * 3) % 18
-#         if self.skill1_frame >= 17:
-#             self.player_mai.state_machine.handle_state_event(('TIMEOUT', None))
-#
-#     def draw(self):
-#         if self.player_mai.face_dir == 1:
-#             self.player_mai.image.clip_composite_draw(177*int(self.skill1_frame), 0, 177, 114, 0, 'h',
-#                                                      self.player_mai.x, self.player_mai.y,400,320)
-#         else:
-#             self.player_mai.image.clip_composite_draw(177*int(self.skill1_frame), 0, 177, 114, 0, '0',
-#                                                      self.player_mai.x, self.player_mai.y,400,320)
+
+class Skill1:
+    def __init__(self, iori):
+        self.player_iori = iori
+        self.skill1_frame = 0
+        self.cur_x = 0
+
+    def enter(self, e):
+        self.player_iori.load_image('iori_skill1_sprite.png')
+        self.skill1_frame = 0
+        self.player_iori.y = 330
+        self.cur_x = self.player_iori.x
+        if self.player_iori.face_dir == -1:
+            self.player_iori.x += 100
+        else:
+            self.player_iori.x -= 100
+    def exit(self, e):
+        self.player_iori.y = 200
+        self.player_iori.x = self.cur_x
+
+    def do(self):
+        self.skill1_frame = (self.skill1_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time * 6) % 44
+        if self.skill1_frame >= 43:
+            self.player_iori.state_machine.handle_state_event(('TIMEOUT', None))
+
+    def draw(self):
+        if self.player_iori.face_dir == 1:
+            self.player_iori.image.clip_composite_draw(302*int(self.skill1_frame), 0, 302, 209, 0, 'h',
+                                                     self.player_iori.x, self.player_iori.y,800,600)
+        else:
+            self.player_iori.image.clip_composite_draw(302*int(self.skill1_frame), 0, 302, 209, 0, '0',
+                                                     self.player_iori.x, self.player_iori.y,800,600)
 
 class Jumpkick:
     def __init__(self, iori):
@@ -335,6 +342,7 @@ class Playeriori:
         self.KICK = Kick(self)
         self.PUNCH = Punch(self)
         self.JUMPKICK = Jumpkick(self)
+        self.SKILL1 = Skill1(self)
 
         def skill1_command(e):
             if k_down(e) and self.input_buffer == ['DOWN', 'J', 'K']:
@@ -351,14 +359,17 @@ class Playeriori:
         self.state_machine = StateMachine(
             self.IDLE,
             {
-                self.IDLE: {right_down: self.RUN, left_down: self.RUN, up_down: self.JUMP,k_down: self.KICK, j_down: self.PUNCH},
+                self.IDLE: {right_down: self.RUN, left_down: self.RUN, up_down: self.JUMP,
+                            (lambda e: k_down(e) and skill1_command(e)): self.SKILL1,
+                            k_down: self.KICK, j_down: self.PUNCH},
                 self.RUN: {right_up: self.IDLE, left_up: self.IDLE, right_down: self.IDLE,
-                           left_down: self.IDLE},
+                           left_down: self.IDLE, up_down: self.JUMP, k_down: self.KICK, j_down: self.PUNCH},
                 self.JUMP: {time_out: self.IDLE,
                             (lambda e, jj=self.JUMP: k_down(e) and jj.jump_frame < 7): self.JUMPKICK},
+                self.JUMPKICK: {time_out: self.IDLE},
                 self.KICK: {time_out: self.IDLE},
                 self.PUNCH: {time_out: self.IDLE},
-                self.JUMPKICK: {time_out: self.IDLE},
+                self.SKILL1: {time_out: self.IDLE},
             }
         )
 
@@ -382,11 +393,11 @@ class Playeriori:
             else:
                 name = None
 
-            if name :
+            if name:
                 self.input_buffer.append(name)
-                if len(self.input_buffer) > 3 and self.input_buffer[2]=='K':
+                if len(self.input_buffer) > 3 and self.input_buffer[2] == 'K':
                     self.input_buffer.clear()
-                    self.state_machine.handle_state_event(('SKILL1_INPUT',event))
+                    self.state_machine.handle_state_event(('SKILL1_INPUT', event))
                     return
                 elif len(self.input_buffer) > 3 and self.input_buffer[2] == 'J':
                     self.input_buffer.clear()
