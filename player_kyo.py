@@ -234,65 +234,64 @@ class Jump:
                                                      self.player_mai.x, self.player_mai.y,180,600)
 
 class Run:
-    def __init__(self, mai):
-        self.player_mai = mai
+    def __init__(self, kyo):
+        self.player_kyo = kyo
         self.run_frame = 0
 
     def enter(self, e):
         self.run_frame = 0
-        if self.player_mai.face_dir == 1:
+        if self.player_kyo.face_dir == 1:
             if right_down(e):
-                self.player_mai.dir = 1
-                self.player_mai.load_image(f'mai_backwalk_{self.run_frame}.png')
+                self.player_kyo.dir = 1
+                self.player_kyo.load_image(f'kyo_backwalk_sprite.png')
             elif left_down(e):
-                self.player_mai.dir = -1
-                self.player_mai.load_image(f'mai_walk_{self.run_frame}.png')
+                self.player_kyo.dir = -1
+                self.player_kyo.load_image(f'kyo_walk_sprite.png')
         else:
             if right_down(e):
-                self.player_mai.dir = -1
-                self.player_mai.load_image(f'mai_walk_{self.run_frame}.png')
+                self.player_kyo.dir = -1
+                self.player_kyo.load_image(f'kyo_walk_spirte.png')
             elif left_down(e):
-                self.player_mai.dir = 1
-                self.player_mai.load_image(f'mai_backwalk_{self.run_frame}.png')
-
+                self.player_kyo.dir = 1
+                self.player_kyo.load_image(f'kyo_backwalk_sprite.png')
 
     def exit(self, e):
         pass
 
     def do(self):
         self.run_frame = (self.run_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 6
-        if self.player_mai.face_dir == 1:
-            if self.player_mai.dir == -1:
-                self.player_mai.load_image(f'mai_walk_{int(self.run_frame)}.png')
+        if self.player_kyo.face_dir == 1:
+            if self.player_kyo.dir == -1:
+                self.player_kyo.load_image(f'kyo_walk_sprite.png')
             else:
-                self.player_mai.load_image(f'mai_backwalk_{int(self.run_frame)}.png')
+                self.player_kyo.load_image(f'kyo_backwalk_sprite.png')
         else:
-            if self.player_mai.dir == 1:
-                self.player_mai.load_image(f'mai_backwalk_{int(self.run_frame)}.png')
+            if self.player_kyo.dir == 1:
+                self.player_kyo.load_image(f'kyo_backwalk_sprite.png')
             else:
-                self.player_mai.load_image(f'mai_walk_{int(self.run_frame)}.png')
+                self.player_kyo.load_image(f'kyo_walk_sprite.png')
 
-        self.player_mai.x += self.player_mai.dir * RUN_SPEED_PPS * game_framework.frame_time
-        if self.player_mai.x < 50:
-            self.player_mai.x = 5
-        elif self.player_mai.x > 1230:
-            self.player_mai.x = 1230
+        self.player_kyo.x += self.player_kyo.dir * RUN_SPEED_PPS * game_framework.frame_time
+        if self.player_kyo.x < 50:
+            self.player_kyo.x = 5
+        elif self.player_kyo.x > 1230:
+            self.player_kyo.x = 1230
 
     def draw(self):
-        if self.player_mai.face_dir == 1:
-            if self.player_mai.dir == -1:
-                self.player_mai.image.clip_composite_draw(0, 0, 73, 101, 0, 'h',
-                                                     self.player_mai.x, self.player_mai.y,200,300)
+        if self.player_kyo.face_dir == 1:
+            if self.player_kyo.dir == -1:
+                self.player_kyo.image.clip_composite_draw(63 * int(self.run_frame), 0, 63, 118, 0, 'h',
+                                                         self.player_kyo.x, self.player_kyo.y, 150, 320)
             else:
-                self.player_mai.image.clip_composite_draw(0, 0, 97, 104, 0, 'h',
-                                                     self.player_mai.x, self.player_mai.y,200,300)
+                self.player_kyo.image.clip_composite_draw(58 * int(self.run_frame), 0, 58, 118, 0, 'h',
+                                                         self.player_kyo.x, self.player_kyo.y, 150, 320)
         else:
-            if self.player_mai.dir == 1:
-                self.player_mai.image.clip_composite_draw(0, 0, 73, 101, 0, 'h',
-                                                     self.player_mai.x, self.player_mai.y,200,300)
+            if self.player_kyo.dir == 1:
+                self.player_kyo.image.clip_composite_draw(63 * int(self.run_frame), 0, 63, 118, 0, '',
+                                                         self.player_kyo.x, self.player_kyo.y, 150, 320)
             else:
-                self.player_mai.image.clip_composite_draw(0, 0, 97, 104, 0, 'h',
-                                                     self.player_mai.x, self.player_mai.y,200,300)
+                self.player_kyo.image.clip_composite_draw(58 * int(self.run_frame), 0, 58, 118, 0, '',
+                                                         self.player_kyo.x, self.player_kyo.y, 150, 320)
 
 class Idle:
     def __init__(self, kyo):
@@ -308,7 +307,7 @@ class Idle:
         pass
 
     def do(self):
-        self.idle_frame = (self.idle_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time*2) % 10
+        self.idle_frame = (self.idle_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time*1.5) % 10
 
     def draw(self):
         if self.player_kyo.face_dir == 1:
@@ -329,6 +328,7 @@ class Playerkyo:
         self.input_buffer = []
 
         self.IDLE = Idle(self)
+        self.RUN = Run(self)
 
         def skill1_command(e):
             if k_down(e) and self.input_buffer == ['DOWN', 'J', 'K']:
@@ -345,7 +345,8 @@ class Playerkyo:
         self.state_machine = StateMachine(
             self.IDLE,
             {
-                self.IDLE: {},
+                self.IDLE:  {right_down: self.RUN, left_down: self.RUN},
+                self.RUN:   {right_up: self.IDLE, left_up: self.IDLE},
 
             }
         )
