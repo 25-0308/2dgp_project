@@ -155,18 +155,18 @@ class Punch:
         pass
 
     def do(self):
-        self.punch_frame = (self.punch_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time * 1.5) % 6
-        self.player_kyo.load_image(f'kyo_punch_{int(self.punch_frame)}.png')
-        if self.punch_frame >= 5:
+        self.punch_frame = (self.punch_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time * 1.5) % 7
+        self.player_kyo.load_image(f'kyo_punch_sprite.png')
+        if self.punch_frame >= 6:
             self.player_kyo.state_machine.handle_state_event(('TIMEOUT', None))
 
     def draw(self):
         if self.player_kyo.face_dir == 1:
-            self.player_kyo.image.clip_composite_draw(0, 0, 163, 119, 0, 'h',
-                                                     self.player_kyo.x, self.player_kyo.y,380,320)
+            self.player_kyo.image.clip_composite_draw(112 * int(self.punch_frame), 0, 112, 106, 0, 'h',
+                                                     self.player_kyo.x, self.player_kyo.y,300,300)
         else:
-            self.player_kyo.image.clip_composite_draw(0, 0, 163, 119, 0, '0',
-                                                     self.player_kyo.x, self.player_kyo.y,380,320)
+            self.player_kyo.image.clip_composite_draw(112 * int(self.punch_frame), 0, 112, 106, 0, '0',
+                                                     self.player_kyo.x, self.player_kyo.y,300,300)
 
 class Kick:
     def __init__(self, kyo):
@@ -330,6 +330,7 @@ class Playerkyo:
         self.RUN = Run(self)
         self.JUMP = Jump(self)
         self.KICK = Kick(self)
+        self.PUNCH = Punch(self)
 
         def skill1_command(e):
             if k_down(e) and self.input_buffer == ['DOWN', 'J', 'K']:
@@ -346,10 +347,11 @@ class Playerkyo:
         self.state_machine = StateMachine(
             self.IDLE,
             {
-                self.IDLE:  {right_down: self.RUN, left_down: self.RUN, up_down: self.JUMP,k_down: self.KICK},
+                self.IDLE:  {right_down: self.RUN, left_down: self.RUN, up_down: self.JUMP,k_down: self.KICK, j_down: self.PUNCH},
                 self.RUN:   {right_up: self.IDLE, left_up: self.IDLE},
                 self.JUMP:  {time_out: self.IDLE},
                 self.KICK:  {time_out: self.IDLE},
+                self.PUNCH: {time_out: self.IDLE},
             }
         )
 
