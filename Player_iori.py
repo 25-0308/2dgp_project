@@ -64,6 +64,13 @@ FRAMES_PER_ACTION = 4
 def load_resource(path):
     base_dir = os.path.dirname(__file__)
     abs_path = os.path.join(base_dir, 'iori', path)
+    print(f"Loading image from: {abs_path}")  # 디버깅용
+    print(f"File exists: {os.path.exists(abs_path)}")  # 파일 존재 확인
+    if not os.path.exists(abs_path):
+        print(f"Available files in iori folder:")
+        iori_folder = os.path.join(base_dir, 'iori')
+        if os.path.exists(iori_folder):
+            print(os.listdir(iori_folder))
     return load_image(abs_path)
 
 class Skill2:
@@ -100,10 +107,10 @@ class Skill1:
         self.cur_x = 0
 
     def enter(self, e):
-        self.player_iori.load_image('iori_skill1_sprite.png')
+        self.player_iori.load_image('iori_skill1_0.png')
         self.skill1_frame = 0
-        self.player_iori.y = 330
         self.cur_x = self.player_iori.x
+        self.player_iori.y = 330
         if self.player_iori.face_dir == -1:
             self.player_iori.x += 100
         else:
@@ -113,16 +120,16 @@ class Skill1:
         self.player_iori.x = self.cur_x
 
     def do(self):
-        self.skill1_frame = (self.skill1_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time * 6) % 44
-        if self.skill1_frame >= 43:
+        self.skill1_frame = (self.skill1_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time * 6) % 50
+        self.player_iori.load_image(f'iori_skill1_{int(self.skill1_frame)}.png')
+        if self.skill1_frame >= 49:
             self.player_iori.state_machine.handle_state_event(('TIMEOUT', None))
-
     def draw(self):
         if self.player_iori.face_dir == 1:
-            self.player_iori.image.clip_composite_draw(302*int(self.skill1_frame), 0, 302, 209, 0, 'h',
+            self.player_iori.image.clip_composite_draw(0, 0, 302, 209, 0, 'h',
                                                      self.player_iori.x, self.player_iori.y,800,600)
         else:
-            self.player_iori.image.clip_composite_draw(302*int(self.skill1_frame), 0, 302, 209, 0, '0',
+            self.player_iori.image.clip_composite_draw(0, 0, 302, 209, 0, '0',
                                                      self.player_iori.x, self.player_iori.y,800,600)
 
 class Jumpkick:
