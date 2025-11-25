@@ -64,13 +64,8 @@ FRAMES_PER_ACTION = 4
 def load_resource(path):
     base_dir = os.path.dirname(__file__)
     abs_path = os.path.join(base_dir, 'iori', path)
-    print(f"Loading image from: {abs_path}")  # 디버깅용
-    print(f"File exists: {os.path.exists(abs_path)}")  # 파일 존재 확인
     if not os.path.exists(abs_path):
-        print(f"Available files in iori folder:")
         iori_folder = os.path.join(base_dir, 'iori')
-        if os.path.exists(iori_folder):
-            print(os.listdir(iori_folder))
     return load_image(abs_path)
 
 class Skill2:
