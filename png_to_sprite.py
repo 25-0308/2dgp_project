@@ -44,7 +44,7 @@ if __name__ == '__main__':
     # iori_skill1 스프라이트 시트 생성
     create_sprite_sheet(
         folder_path=iori_folder,
-        prefix='kyo_skill1_',
-        output_name='kyo_skill1_sprite.png',
-        frame_count=26
+        prefix='kyo_skill2_',
+        output_name='kyo_skill2_sprite.png',
+        frame_count=19
     )
