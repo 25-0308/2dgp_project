@@ -131,17 +131,17 @@ class Jumpkick:
         self.player_kyo.y = 200
 
     def do(self):
-        self.jumpkick_frame = (self.jumpkick_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time * 2.5) % 14
-        if self.jumpkick_frame >= 13:
+        self.jumpkick_frame = (self.jumpkick_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time * 2.5) % 15
+        if self.jumpkick_frame >= 14:
             self.player_kyo.state_machine.handle_state_event(('TIMEOUT', None))
 
     def draw(self):
         if self.player_kyo.face_dir == 1:
-            self.player_kyo.image.clip_composite_draw(140*int(self.jumpkick_frame), 0, 140, 209, 0, 'h',
-                                                     self.player_kyo.x, self.player_kyo.y,350,500)
+            self.player_kyo.image.clip_composite_draw(114*int(self.jumpkick_frame), 0, 114, 185, 0, 'h',
+                                                     self.player_kyo.x, self.player_kyo.y,300,500)
         else:
-            self.player_kyo.image.clip_composite_draw(140*int(self.jumpkick_frame), 0, 140, 209, 0, '0',
-                                                     self.player_kyo.x, self.player_kyo.y,350,500)
+            self.player_kyo.image.clip_composite_draw(114*int(self.jumpkick_frame), 0, 114, 185, 0, '0',
+                                                     self.player_kyo.x, self.player_kyo.y,300,500)
 
 class Punch:
     def __init__(self, kyo):
@@ -331,6 +331,7 @@ class Playerkyo:
         self.JUMP = Jump(self)
         self.KICK = Kick(self)
         self.PUNCH = Punch(self)
+        self.JUMPKICK = Jumpkick(self)
 
         def skill1_command(e):
             if k_down(e) and self.input_buffer == ['DOWN', 'J', 'K']:
@@ -349,9 +350,11 @@ class Playerkyo:
             {
                 self.IDLE:  {right_down: self.RUN, left_down: self.RUN, up_down: self.JUMP,k_down: self.KICK, j_down: self.PUNCH},
                 self.RUN:   {right_up: self.IDLE, left_up: self.IDLE},
-                self.JUMP:  {time_out: self.IDLE},
+                self.JUMP:  {time_out: self.IDLE,
+                             (lambda e, jj=self.JUMP: k_down(e) and jj.jump_frame < 7): self.JUMPKICK},
                 self.KICK:  {time_out: self.IDLE},
                 self.PUNCH: {time_out: self.IDLE},
+                self.JUMPKICK: {time_out: self.IDLE},
             }
         )
 
