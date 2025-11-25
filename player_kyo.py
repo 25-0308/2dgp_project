@@ -98,24 +98,26 @@ class Skill1:
         self.skill1_frame = 0
 
     def enter(self, e):
-        self.player_kyo.load_image('kyo_skill1_sprite.png')
+        self.player_kyo.load_image('kyo_skill1_0.png')
         self.skill1_frame = 0
+        self.player_kyo.y = 250
 
     def exit(self, e):
         self.player_kyo.y = 200
 
     def do(self):
-        self.skill1_frame = (self.skill1_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time * 3) % 18
-        if self.skill1_frame >= 17:
+        self.skill1_frame = (self.skill1_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time * 3) % 25
+        self.player_kyo.load_image(f'kyo_skill1_{int(self.skill1_frame)}.png')
+        if self.skill1_frame >= 24:
             self.player_kyo.state_machine.handle_state_event(('TIMEOUT', None))
 
     def draw(self):
         if self.player_kyo.face_dir == 1:
-            self.player_kyo.image.clip_composite_draw(177*int(self.skill1_frame), 0, 177, 114, 0, 'h',
-                                                     self.player_kyo.x, self.player_kyo.y,400,320)
+            self.player_kyo.image.clip_composite_draw(0, 0, 215, 122, 0, 'h',
+                                                     self.player_kyo.x, self.player_kyo.y,400,400)
         else:
-            self.player_kyo.image.clip_composite_draw(177*int(self.skill1_frame), 0, 177, 114, 0, '0',
-                                                     self.player_kyo.x, self.player_kyo.y,400,320)
+            self.player_kyo.image.clip_composite_draw(0, 0, 215, 122, 0, '0',
+                                                     self.player_kyo.x, self.player_kyo.y,600,400)
 
 class Jumpkick:
     def __init__(self, kyo):
@@ -332,6 +334,7 @@ class Playerkyo:
         self.KICK = Kick(self)
         self.PUNCH = Punch(self)
         self.JUMPKICK = Jumpkick(self)
+        self.SKILL1 = Skill1(self)
 
         def skill1_command(e):
             if k_down(e) and self.input_buffer == ['DOWN', 'J', 'K']:
@@ -348,13 +351,17 @@ class Playerkyo:
         self.state_machine = StateMachine(
             self.IDLE,
             {
-                self.IDLE:  {right_down: self.RUN, left_down: self.RUN, up_down: self.JUMP,k_down: self.KICK, j_down: self.PUNCH},
-                self.RUN:   {right_up: self.IDLE, left_up: self.IDLE},
-                self.JUMP:  {time_out: self.IDLE,
-                             (lambda e, jj=self.JUMP: k_down(e) and jj.jump_frame < 7): self.JUMPKICK},
-                self.KICK:  {time_out: self.IDLE},
-                self.PUNCH: {time_out: self.IDLE},
+                self.IDLE: {right_down: self.RUN, left_down: self.RUN, up_down: self.JUMP,
+                            (lambda e: k_down(e) and skill1_command(e)): self.SKILL1,
+                            k_down: self.KICK, j_down: self.PUNCH},
+                self.RUN: {right_up: self.IDLE, left_up: self.IDLE, right_down: self.IDLE,
+                           left_down: self.IDLE, up_down: self.JUMP, k_down: self.KICK, j_down: self.PUNCH},
+                self.JUMP: {time_out: self.IDLE,
+                            (lambda e, jj=self.JUMP: k_down(e) and jj.jump_frame < 7): self.JUMPKICK},
                 self.JUMPKICK: {time_out: self.IDLE},
+                self.KICK: {time_out: self.IDLE},
+                self.PUNCH: {time_out: self.IDLE},
+                self.SKILL1: {time_out: self.IDLE},
             }
         )
 
