@@ -255,10 +255,16 @@ class Run:
 
     def do(self):
         self.run_frame = (self.run_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 6
-        if self.player_kk.dir == -1:
-            self.player_kk.load_image(f'kk_walk_{int(self.run_frame)}.png')
-        elif self.player_kk.dir == 1:
-            self.player_kk.load_image(f'kk_backwalk_{int(self.run_frame)}.png')
+        if self.player_kk.face_dir == 1:
+            if self.player_kk.dir == -1:
+                self.player_kk.load_image(f'kk_walk_{int(self.run_frame)}.png')
+            elif self.player_kk.dir == 1:
+                self.player_kk.load_image(f'kk_backwalk_{int(self.run_frame)}.png')
+        else:
+            if self.player_kk.dir == 1:
+                self.player_kk.load_image(f'kk_walk_{int(self.run_frame)}.png')
+            elif self.player_kk.dir == -1:
+                self.player_kk.load_image(f'kk_backwalk_{int(self.run_frame)}.png')
 
         self.player_kk.x += self.player_kk.dir * RUN_SPEED_PPS * game_framework.frame_time
         if self.player_kk.x < 50:
@@ -268,13 +274,19 @@ class Run:
 
     def draw(self):
         if self.player_kk.face_dir == 1:
+            if self.player_kk.dir == -1:
                 self.player_kk.image.clip_composite_draw(0, 0, 62, 107, 0, 'h',
+                                                     self.player_kk.x, self.player_kk.y,150,300)
+            else:
+                self.player_kk.image.clip_composite_draw(0, 0, 62, 107, 0, '',
                                                      self.player_kk.x, self.player_kk.y,150,300)
         else:
             if self.player_kk.dir == 1:
                 self.player_kk.image.clip_composite_draw(0, 0, 62, 107, 0, '0',
                                                      self.player_kk.x, self.player_kk.y,150,300)
-
+            else:
+                self.player_kk.image.clip_composite_draw(0, 0, 62, 107, 0, '',
+                                                     self.player_kk.x, self.player_kk.y,150,300)
 class Idle:
     def __init__(self, kk):
         self.player_kk = kk
