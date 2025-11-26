@@ -278,7 +278,7 @@ class Run:
             else:
                 self.player_iori.load_image(f'iori_backwalk_sprite.png')
         else:
-            if self.player_iori.dir == 1:
+            if self.player_iori.dir == -1:
                 self.player_iori.load_image(f'iori_backwalk_sprite.png')
             else:
                 self.player_iori.load_image(f'iori_walk_sprite.png')
@@ -299,10 +299,10 @@ class Run:
                                                      self.player_iori.x, self.player_iori.y,200,300)
         else:
             if self.player_iori.dir == 1:
-                self.player_iori.image.clip_composite_draw(68 * int(self.run_frame), 0, 68, 104, 0, 'h',
+                self.player_iori.image.clip_composite_draw(68 * int(self.run_frame), 0, 68, 104, 0, '',
                                                      self.player_iori.x, self.player_iori.y,200,300)
             else:
-                self.player_iori.image.clip_composite_draw(70 * int(self.run_frame), 0, 70, 107, 0, 'h',
+                self.player_iori.image.clip_composite_draw(70 * int(self.run_frame), 0, 70, 107, 0, '',
                                                      self.player_iori.x, self.player_iori.y,200,300)
 
 class Idle:
