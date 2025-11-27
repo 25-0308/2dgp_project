@@ -60,7 +60,7 @@ def init():
     elif game_framework.get_character_index() == 4:
        player_r = Playeriori()
 
-    index = randint(1,2)
+    index = randint(1,4)
     if index == 1:
         player_l = Playermai()
     elif index == 2:
