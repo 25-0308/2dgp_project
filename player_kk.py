@@ -278,7 +278,7 @@ class Run:
                 self.player_kk.image.clip_composite_draw(0, 0, 62, 107, 0, 'h',
                                                      self.player_kk.x, self.player_kk.y,150,300)
             else:
-                self.player_kk.image.clip_composite_draw(0, 0, 62, 107, 0, '',
+                self.player_kk.image.clip_composite_draw(0, 0, 62, 107, 0, 'h',
                                                      self.player_kk.x, self.player_kk.y,150,300)
         else:
             if self.player_kk.dir == 1:
