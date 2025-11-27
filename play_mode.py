@@ -29,8 +29,6 @@ def handle_events():
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.quit()
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_p:
-            game_framework.change_mode(ending_mode)
         elif event.type == SDL_KEYDOWN and event.key == SDLK_m:
             dead_flag = True
         else:
