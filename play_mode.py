@@ -14,10 +14,15 @@ import game_world
 import ending_mode
 
 global bg_timer
-
 global bg_count
 
+global font
+global dead_flag
+global fontsize
+dead_flag = False
+
 def handle_events():
+    global dead_flag
     event_list = get_events()
     for event in event_list:
         if event.type == SDL_QUIT:
@@ -26,6 +31,8 @@ def handle_events():
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_p:
             game_framework.change_mode(ending_mode)
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_m:
+            dead_flag = True
         else:
             player_r.handle_event(event)
 
@@ -42,6 +49,10 @@ def init():
     bg = load_image(f'stage_{bg_count}.png')
     global player_r, player_l
 
+    global font
+    global fontsize
+    font = load_font('kof_font.TTF', 30)
+    fontsize = 0
     if game_framework.get_character_index() == 1:
         player_r = Playermai()
     elif game_framework.get_character_index() == 2:
@@ -61,7 +72,7 @@ def init():
     elif index == 4:
        player_l = Playeriori()
 
-    player_r.face_dir = -1
+    player_r.face_dir = 1
     player_l.face_dir = -1
     player_r.x , player_r.y = 950, 200
     player_l.x , player_l.y = 330, 200
@@ -74,22 +85,36 @@ def update():
     global bg_count
     global bg
     global bg_timer
+    global fontsize
 
     bg_timer += game_framework.frame_time
     if bg_timer >= 0.15:
         bg_timer = 0.0
         bg_count += 1
+    if dead_flag:
+        fontsize += 50*game_framework.frame_time
+        if(fontsize >=120):
+            fontsize = 120
 
     bg = load_image(f'stage_{bg_count % 8}.png')
     game_world.handle_collisions()
 
 def draw():
+    global dead_flag
+    global fontsize
+    global font
+    font = load_font('kof_font.TTF', int(fontsize))
     clear_canvas()
     bg.clip_composite_draw(0, 0, 752, 224, 0,'0',
                            canvas_x // 2, canvas_y // 2,canvas_x,canvas_y)
+    if dead_flag:
+        font.draw(canvas_x // 2 - 250, 550, 'K O!', (255, 255, 0))
+    if fontsize == 120:
+        delay(2.0)
+        game_framework.change_mode(ending_mode)
+
     game_world.render()
     update_canvas()
-
 
 def finish():
     game_world.clear()
