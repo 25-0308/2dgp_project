@@ -115,7 +115,7 @@ class Skill1:
         self.player_iori.x = self.cur_x
 
     def do(self):
-        self.skill1_frame = (self.skill1_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time * 6) % 50
+        self.skill1_frame = (self.skill1_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time * 5) % 50
         self.player_iori.load_image(f'iori_skill1_{int(self.skill1_frame)}.png')
         if self.skill1_frame >= 49:
             self.player_iori.state_machine.handle_state_event(('TIMEOUT', None))
