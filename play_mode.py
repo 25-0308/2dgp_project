@@ -71,7 +71,7 @@ def init():
        player_l = Playeriori()
 
     player_r.face_dir = -1
-    player_l.face_dir = 1
+    player_l.face_dir = -1
     player_r.x , player_r.y = 950, 200
     player_l.x , player_l.y = 330, 200
 
