@@ -29,8 +29,6 @@ def handle_events():
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.quit()
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_m:
-            dead_flag = True
         else:
             player_r.handle_event(event)
 
@@ -91,7 +89,9 @@ def update():
     global bg
     global bg_timer
     global fontsize
-
+    if player_r.hp <= 0 or player_l.hp <= 0:
+        global dead_flag
+        dead_flag = True
     bg_timer += game_framework.frame_time
     if bg_timer >= 0.15:
         bg_timer = 0.0

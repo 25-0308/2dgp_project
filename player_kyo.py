@@ -325,7 +325,9 @@ class Playerkyo:
         self.face_dir = 1
         self.dir = 0
         self.load_image('kyo_idle_sprite.png')
-
+        self.hp = 100
+        self.hit = False
+        self.prev_state = None
         self.input_buffer = []
 
         self.IDLE = Idle(self)
@@ -372,6 +374,12 @@ class Playerkyo:
         self.image = load_resource(path)
 
     def update(self):
+        current_state = self.state_machine.cur_state
+        if self.prev_state != current_state:
+            # 공격 상태로 전환될 때 hit 플래그 초기화
+            if current_state in [self.KICK, self.PUNCH, self.JUMPKICK, self.SKILL1, self.SKILL2]:
+                self.hit = False
+            self.prev_state = current_state
         self.state_machine.update()
 
     def handle_event(self, event):
@@ -412,9 +420,9 @@ class Playerkyo:
             # 자신이 스킬 중무적
             if (self.state_machine.cur_state == self.SKILL1 or
                     self.state_machine.cur_state == self.SKILL2):
-                print("스킬중 무적")
                 return
-
+            if other.hit:
+                return
             # 상대방이 공격 중
             if (other.state_machine.cur_state == other.KICK or
                     other.state_machine.cur_state == other.PUNCH or
@@ -425,6 +433,7 @@ class Playerkyo:
                 # 상대방의 스킬 공격인지 확인
                 if (other.state_machine.cur_state == other.SKILL1 or
                         other.state_machine.cur_state == other.SKILL2):
-                    print("스킬 데미지 30")
+                    self.hp -= 30
                 else:
-                    print("기본공격 데미지 20")
+                    self.hp -= 10
+                other.hit = True
