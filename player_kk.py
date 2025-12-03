@@ -410,6 +410,8 @@ class Playerkk:
                 return self.x - 150, self.y + 70 , self.x + 25, self.y + 130
             elif self.state_machine.cur_state == self.KICK:
                 return self.x - 140, self.y + 30, self.x + 80, self.y + 90
+            elif self.state_machine.cur_state == self.PUNCH:
+                return self.x - 140, self.y + 10, self.x + 80, self.y + 70
         else:
             return self.x - 40, self.y - 130, self.x + 55, self.y + 130
 
