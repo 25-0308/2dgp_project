@@ -400,7 +400,14 @@ class Playerkk:
         draw_rectangle(*self.get_bb())
 
     def get_bb(self):
-        return self.x - 40, self.y - 130, self.x + 55, self.y + 130
+        if self.face_dir == 1:
+            if (self.state_machine.cur_state == self.IDLE or
+            self.state_machine.cur_state == self.RUN):
+                return self.x - 40, self.y - 130, self.x + 55, self.y + 130
+            elif self.state_machine.cur_state == self.JUMP:
+                return self.x - 60, self.y + 20, self.x + 35, self.y + 280
+        else:
+            return self.x - 40, self.y - 130, self.x + 55, self.y + 130
 
     def handle_collision(self, group, other):
         if group == 'r_vs_l':
