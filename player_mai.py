@@ -408,4 +408,23 @@ class Playermai:
         return self.x - 40, self.y - 130, self.x + 55, self.y + 130
 
     def handle_collision(self, group, other):
-        pass
+        if group == 'r_vs_l':
+            # 자신이 스킬 중무적
+            if (self.state_machine.cur_state == self.SKILL1 or
+                    self.state_machine.cur_state == self.SKILL2):
+                print("스킬중 무적")
+                return
+
+            # 상대방이 공격 중
+            if (other.state_machine.cur_state == other.KICK or
+                    other.state_machine.cur_state == other.PUNCH or
+                    other.state_machine.cur_state == other.JUMPKICK or
+                    other.state_machine.cur_state == other.SKILL1 or
+                    other.state_machine.cur_state == other.SKILL2):
+
+                # 상대방의 스킬 공격인지 확인
+                if (other.state_machine.cur_state == other.SKILL1 or
+                        other.state_machine.cur_state == other.SKILL2):
+                    print("스킬 데미지 30")
+                else:
+                    print("기본공격 데미지 20")

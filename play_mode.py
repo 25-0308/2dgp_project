@@ -78,6 +78,8 @@ def init():
     game_world.add_object(player_r)
     game_world.add_object(player_l)
 
+    game_world.add_collision_pair('r_vs_l',player_l,player_r)
+
 def update():
     game_world.update()
     global bg_count
