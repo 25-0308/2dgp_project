@@ -430,7 +430,7 @@ class Playermai:
             elif self.state_machine.cur_state == self.JUMPKICK:
                 return self.x - 50, self.y + 70, self.x + 155, self.y + 130
             elif self.state_machine.cur_state == self.KICK:
-                return self.x - 140, self.y + 30, self.x + 80, self.y + 90
+                return self.x - 40, self.y + 30, self.x + 180, self.y + 90
             elif self.state_machine.cur_state == self.PUNCH:
                 return self.x - 140, self.y + 10, self.x + 80, self.y + 70
             elif self.state_machine.cur_state == self.SKILL1:
