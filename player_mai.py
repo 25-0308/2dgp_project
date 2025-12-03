@@ -405,7 +405,38 @@ class Playermai:
         draw_rectangle(*self.get_bb())
 
     def get_bb(self):
-        return self.x - 40, self.y - 130, self.x + 55, self.y + 130
+        if self.face_dir == 1:
+            if (self.state_machine.cur_state == self.IDLE or
+                    self.state_machine.cur_state == self.RUN):
+                return self.x - 40, self.y - 130, self.x + 55, self.y + 130
+            elif self.state_machine.cur_state == self.JUMP:
+                return self.x - 40, self.y + 20, self.x + 55, self.y + 280
+            elif self.state_machine.cur_state == self.JUMPKICK:
+                return self.x - 150, self.y + 70, self.x + 25, self.y + 130
+            elif self.state_machine.cur_state == self.KICK:
+                return self.x - 140, self.y + 30, self.x + 80, self.y + 90
+            elif self.state_machine.cur_state == self.PUNCH:
+                return self.x - 140, self.y + 10, self.x + 80, self.y + 70
+            elif self.state_machine.cur_state == self.SKILL1:
+                return self.x - 170, self.y - 70, self.x + 100, self.y + 230
+            elif self.state_machine.cur_state == self.SKILL2:
+                return self.x - 200, self.y + 35, self.x + 100, self.y + 300
+        else:
+            if (self.state_machine.cur_state == self.IDLE or
+                    self.state_machine.cur_state == self.RUN):
+                return self.x - 60, self.y - 130, self.x + 35, self.y + 130
+            elif self.state_machine.cur_state == self.JUMP:
+                return self.x - 60, self.y + 20, self.x + 35, self.y + 280
+            elif self.state_machine.cur_state == self.JUMPKICK:
+                return self.x - 50, self.y + 70, self.x + 125, self.y + 130
+            elif self.state_machine.cur_state == self.KICK:
+                return self.x - 40, self.y + 30, self.x + 140, self.y + 90
+            elif self.state_machine.cur_state == self.PUNCH:
+                return self.x - 40, self.y + 10, self.x + 140, self.y + 70
+            elif self.state_machine.cur_state == self.SKILL1:
+                return self.x - 70, self.y - 70, self.x + 170, self.y + 230
+            elif self.state_machine.cur_state == self.SKILL2:
+                return self.x - 100, self.y + 35, self.x + 200, self.y + 300
 
     def handle_collision(self, group, other):
         if group == 'r_vs_l':
