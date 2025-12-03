@@ -431,7 +431,7 @@ class Playerkk:
             elif self.state_machine.cur_state == self.SKILL1:
                 return self.x - 70, self.y - 70, self.x + 170, self.y + 230
             elif self.state_machine.cur_state == self.SKILL2:
-                return self.x - 200, self.y + 35, self.x + 100, self.y + 300
+                return self.x - 100, self.y + 35, self.x + 200, self.y + 300
 
     def handle_collision(self, group, other):
         if group == 'r_vs_l':
