@@ -249,10 +249,10 @@ class Run:
                 self.player_mai.load_image(f'mai_walk_{self.run_frame}.png')
         else:
             if right_down(e):
-                self.player_mai.dir = -1
+                self.player_mai.dir = 1
                 self.player_mai.load_image(f'mai_walk_{self.run_frame}.png')
             elif left_down(e):
-                self.player_mai.dir = 1
+                self.player_mai.dir = -1
                 self.player_mai.load_image(f'mai_backwalk_{self.run_frame}.png')
 
 
@@ -268,9 +268,9 @@ class Run:
                 self.player_mai.load_image(f'mai_backwalk_{int(self.run_frame)}.png')
         else:
             if self.player_mai.dir == 1:
-                self.player_mai.load_image(f'mai_backwalk_{int(self.run_frame)}.png')
-            else:
                 self.player_mai.load_image(f'mai_walk_{int(self.run_frame)}.png')
+            else:
+                self.player_mai.load_image(f'mai_backwalk_{int(self.run_frame)}.png')
 
         self.player_mai.x += self.player_mai.dir * RUN_SPEED_PPS * game_framework.frame_time
         if self.player_mai.x < 50:
@@ -424,19 +424,19 @@ class Playermai:
         else:
             if (self.state_machine.cur_state == self.IDLE or
                     self.state_machine.cur_state == self.RUN):
-                return self.x - 60, self.y - 130, self.x + 35, self.y + 130
+                return self.x - 40, self.y - 130, self.x + 55, self.y + 130
             elif self.state_machine.cur_state == self.JUMP:
-                return self.x - 60, self.y + 20, self.x + 35, self.y + 280
+                return self.x - 40, self.y + 20, self.x + 55, self.y + 280
             elif self.state_machine.cur_state == self.JUMPKICK:
-                return self.x - 50, self.y + 70, self.x + 125, self.y + 130
+                return self.x - 150, self.y + 70, self.x + 25, self.y + 130
             elif self.state_machine.cur_state == self.KICK:
-                return self.x - 40, self.y + 30, self.x + 140, self.y + 90
+                return self.x - 140, self.y + 30, self.x + 80, self.y + 90
             elif self.state_machine.cur_state == self.PUNCH:
-                return self.x - 40, self.y + 10, self.x + 140, self.y + 70
+                return self.x - 140, self.y + 10, self.x + 80, self.y + 70
             elif self.state_machine.cur_state == self.SKILL1:
-                return self.x - 70, self.y - 70, self.x + 170, self.y + 230
+                return self.x - 180, self.y - 70, self.x + 100, self.y + 230
             elif self.state_machine.cur_state == self.SKILL2:
-                return self.x - 100, self.y + 35, self.x + 200, self.y + 300
+                return self.x - 200, self.y - 35, self.x + 100, self.y + 240
 
     def handle_collision(self, group, other):
         if group == 'r_vs_l':
