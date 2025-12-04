@@ -366,7 +366,7 @@ class Playerkyo:
                 self.KICK: {time_out: self.IDLE},
                 self.PUNCH: {time_out: self.IDLE},
                 self.SKILL1: {time_out: self.IDLE},
-                self.SKILL2: {time_out: self.IDLE, }
+                self.SKILL2: {time_out: self.IDLE,}
             }
         )
 
