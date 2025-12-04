@@ -442,9 +442,9 @@ class Playerkyo:
             elif self.state_machine.cur_state == self.PUNCH:
                 return self.x - 40, self.y + 10, self.x + 140, self.y + 70
             elif self.state_machine.cur_state == self.SKILL1:
-                return self.x - 70, self.y - 70, self.x + 170, self.y + 230
+                return self.x - 70, self.y - 70, self.x + 270, self.y + 150
             elif self.state_machine.cur_state == self.SKILL2:
-                return self.x - 100, self.y + 35, self.x + 200, self.y + 300
+                return self.x - 100, self.y - 150, self.x + 170, self.y + 300
 
     def handle_collision(self, group, other):
         if group == 'r_vs_l':
