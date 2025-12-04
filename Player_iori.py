@@ -438,8 +438,8 @@ class Playeriori:
                 return self.x - 140, self.y + 10, self.x + 80, self.y + 70
             elif self.state_machine.cur_state == self.SKILL1:
                 return self.x - 350, self.y - 270, self.x - 130, self.y + 230
-            elif self.state_machine.cur_state == self.SKILL2:
-                return self.x - 200, self.y + 35, self.x + 100, self.y + 300
+            elif self.state_machine.cur_state == self.SKILL2:   
+                return self.x - 200, self.y - 100, self.x + 100, self.y + 200
         else:
             if (self.state_machine.cur_state == self.IDLE or
                     self.state_machine.cur_state == self.RUN):
