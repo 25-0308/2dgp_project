@@ -68,15 +68,15 @@ def init():
     elif index == 4:
        player_l = Playeriori()
 
-    # player_r.face_dir = 1
-    # player_l.face_dir = -1
-    # player_r.x , player_r.y = 950, 200
-    # player_l.x , player_l.y = 330, 200
+    player_r.face_dir = 1
+    player_l.face_dir = -1
+    player_r.x , player_r.y = 950, 200
+    player_l.x , player_l.y = 330, 200
 
-    player_r.face_dir = -1
-    player_l.face_dir = 1
-    player_l.x, player_l.y = 950, 200
-    player_r.x, player_r.y = 330, 200
+    # player_r.face_dir = -1
+    # player_l.face_dir = 1
+    # player_l.x, player_l.y = 950, 200
+    # player_r.x, player_r.y = 330, 200
 
     game_world.add_object(player_r)
     game_world.add_object(player_l)
