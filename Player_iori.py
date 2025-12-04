@@ -455,7 +455,7 @@ class Playeriori:
             elif self.state_machine.cur_state == self.SKILL1:
                 return self.x + 150, self.y - 270, self.x + 310, self.y + 230
             elif self.state_machine.cur_state == self.SKILL2:
-                return self.x - 100, self.y + 35, self.x + 200, self.y + 300
+                return self.x - 100, self.y - 100, self.x + 200, self.y + 200
 
     def handle_collision(self, group, other):
         if group == 'r_vs_l':
