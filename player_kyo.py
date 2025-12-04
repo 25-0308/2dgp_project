@@ -250,10 +250,10 @@ class Run:
                 self.player_kyo.load_image(f'kyo_walk_sprite.png')
         else:
             if right_down(e):
-                self.player_kyo.dir = -1
+                self.player_kyo.dir = 1
                 self.player_kyo.load_image(f'kyo_walk_sprite.png')
             elif left_down(e):
-                self.player_kyo.dir = 1
+                self.player_kyo.dir = -1
                 self.player_kyo.load_image(f'kyo_backwalk_sprite.png')
 
     def exit(self, e):
