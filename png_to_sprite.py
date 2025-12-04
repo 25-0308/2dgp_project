@@ -39,12 +39,12 @@ def create_sprite_sheet(folder_path, prefix, output_name, frame_count):
 
 # 사용 예시
 if __name__ == '__main__':
-    iori_folder = r'C:\Users\00rhk\Desktop\2DGP\2dgp_project\kyo'
+    iori_folder = r'C:\Users\Admin\Desktop\2DGP\2dgp_project\iori'
 
     # iori_skill1 스프라이트 시트 생성
     create_sprite_sheet(
         folder_path=iori_folder,
-        prefix='kyo_skill2_',
-        output_name='kyo_skill2_sprite.png',
-        frame_count=19
+        prefix='iori_dead_',
+        output_name='iori_dead_sprite.png',
+        frame_count=30
     )
