@@ -2,7 +2,7 @@ from pico2d import *
 
 import game_framework
 import game_world
-import play_mode
+import select_mode
 
 global font
 
@@ -54,9 +54,7 @@ def handle_events():
             game_framework.quit()
 
         elif event.type == SDL_KEYDOWN:
-            if event.key == SDLK_SPACE:  # '=' 키
-                game_framework.change_mode(play_mode)
-            elif event.key == SDLK_ESCAPE:
+            if event.key == SDLK_ESCAPE:
                 game_framework.quit()
 
 
