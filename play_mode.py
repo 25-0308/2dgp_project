@@ -35,6 +35,13 @@ def draw_hp_bar(player, x_offset):
         for i in range(bar_height - 2):
             draw_rectangle(bar_x + 1, bar_y + 1 + i, bar_x + hp_width - 1, bar_y + 2 + i)
 
+def draw_portrait(index_r,index_x):
+    portrait_width = 100
+    portrait_height = 100
+    portrait_x = 0
+    portrait_y = 650
+
+
 
 def handle_events():
     global dead_flag
@@ -123,12 +130,14 @@ def draw():
     global dead_flag
     global fontsize
     global font
+    font_vs = load_font('kof_font.TTF', 35)
     font = load_font('kof_font.TTF', int(fontsize))
     clear_canvas()
     bg.clip_composite_draw(0, 0, 752, 224, 0,'0',
                            canvas_x // 2, canvas_y // 2,canvas_x,canvas_y)
+    font_vs.draw(canvas_x // 2 - 50, 665, 'VS', (255, 255, 0))
     if dead_flag:
-        font.draw(canvas_x // 2 - 250, 550, 'K O!', (255, 255, 0))
+        font.draw(canvas_x // 2 - 220, 550, 'K O!', (255, 255, 0))
     if fontsize == 120:
         delay(2.0)
         game_framework.change_mode(ending_mode)
