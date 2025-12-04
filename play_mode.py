@@ -21,6 +21,21 @@ global dead_flag
 global fontsize
 dead_flag = False
 
+
+def draw_hp_bar(player, x_offset):
+    bar_width = 300
+    bar_height = 30
+    bar_x = x_offset
+    bar_y = 650
+
+    draw_rectangle(bar_x, bar_y, bar_x + bar_width, bar_y + bar_height)
+
+    hp_width = int((player.hp / 100) * bar_width)
+    if player.hp > 0:
+        for i in range(bar_height - 2):
+            draw_rectangle(bar_x + 1, bar_y + 1 + i, bar_x + hp_width - 1, bar_y + 2 + i)
+
+
 def handle_events():
     global dead_flag
     event_list = get_events()
@@ -68,15 +83,15 @@ def init():
     elif index == 4:
        player_l = Playeriori()
 
-    # player_r.face_dir = 1
-    # player_l.face_dir = -1
-    # player_r.x , player_r.y = 950, 200
-    # player_l.x , player_l.y = 330, 200
+    player_r.face_dir = 1
+    player_l.face_dir = -1
+    player_r.x , player_r.y = 950, 200
+    player_l.x , player_l.y = 330, 200
 
-    player_r.face_dir = -1
-    player_l.face_dir = 1
-    player_l.x, player_l.y = 950, 200
-    player_r.x, player_r.y = 330, 200
+    # player_r.face_dir = -1
+    # player_l.face_dir = 1
+    # player_l.x, player_l.y = 950, 200
+    # player_r.x, player_r.y = 330, 200
 
     game_world.add_object(player_r)
     game_world.add_object(player_l)
@@ -117,6 +132,9 @@ def draw():
     if fontsize == 120:
         delay(2.0)
         game_framework.change_mode(ending_mode)
+
+    draw_hp_bar(player_l, 50)  # 왼쪽 플레이어
+    draw_hp_bar(player_r, canvas_x - 350)  # 오른쪽 플레이어
 
     game_world.render()
     update_canvas()
