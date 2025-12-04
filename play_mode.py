@@ -35,12 +35,31 @@ def draw_hp_bar(player, x_offset):
         for i in range(bar_height - 2):
             draw_rectangle(bar_x + 1, bar_y + 1 + i, bar_x + hp_width - 1, bar_y + 2 + i)
 
-def draw_portrait(index_r,index_x):
+def draw_portrait(index_l,index_r):
     portrait_width = 100
-    portrait_height = 100
-    portrait_x = 0
-    portrait_y = 650
+    portrait_height = 80
+    portrait_y = 630
+    if index_r == 1:
+        portrait_r = load_image('mai_portrait.png')
+    elif index_r == 2:
+        portrait_r = load_image('kk_portrait.png')
+    elif index_r == 3:
+        portrait_r = load_image('kyo_portrait.png')
+    elif index_r == 4:
+        portrait_r = load_image('iori_portrait.png')
 
+    if index_l == 1:
+        portrait_l = load_image('mai_portrait.png')
+    elif index_l == 2:
+        portrait_l = load_image('kk_portrait.png')
+    elif index_l == 3:
+        portrait_l = load_image('kyo_portrait.png')
+    elif index_l == 4:
+        portrait_l = load_image('iori_portrait.png')
+    portrait_r.clip_composite_draw(0, 0, 182, 158, 0,'0',
+                           730, portrait_y + portrait_height // 2,portrait_width,portrait_height)
+    portrait_l.clip_composite_draw(0, 0, 182, 158, 0,'0',
+                           520, portrait_y + portrait_height // 2,portrait_width,portrait_height)
 
 
 def handle_events():
@@ -80,6 +99,7 @@ def init():
     elif game_framework.get_character_index() == 4:
        player_r = Playeriori()
 
+    global index
     index = randint(1,4)
     if index == 1:
         player_l = Playermai()
@@ -130,6 +150,7 @@ def draw():
     global dead_flag
     global fontsize
     global font
+    global index
     font_vs = load_font('kof_font.TTF', 35)
     font = load_font('kof_font.TTF', int(fontsize))
     clear_canvas()
@@ -144,6 +165,7 @@ def draw():
 
     draw_hp_bar(player_l, 50)  # 왼쪽 플레이어
     draw_hp_bar(player_r, canvas_x - 350)  # 오른쪽 플레이어
+    draw_portrait(index, game_framework.get_character_index())
 
     game_world.render()
     update_canvas()
