@@ -7,5 +7,5 @@ import play_mode
 import ending_mode
 
 open_canvas(1280, 720)
-game_framework.run(select_mode)
+game_framework.run(title_mode)
 close_canvas()

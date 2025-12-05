@@ -100,7 +100,7 @@ def init():
        player_r = Playeriori()
 
     global index
-    index = randint(1,1)
+    index = randint(1,4)
     if index == 1:
         player_l = Playermai()
     elif index == 2:
