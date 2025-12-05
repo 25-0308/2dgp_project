@@ -20,6 +20,7 @@ global bg_count
 global font
 global dead_flag
 global fontsize
+global winner_index
 dead_flag = False
 
 
@@ -121,9 +122,9 @@ def init():
     # player_l.x, player_l.y = 950, 200
     # player_r.x, player_r.y = 330, 200
 
-    # player_l.ai = AIPlayer(player_l, 'easy')
+    player_l.ai = AIPlayer(player_l, 'easy')
     # player_l.ai = AIPlayer(player_l,'normal')
-    player_l.ai = AIPlayer(player_l, 'hard')
+    # player_l.ai = AIPlayer(player_l, 'hard')
     player_l.ai.set_target(player_r)
 
     game_world.add_object(player_r)
@@ -159,6 +160,7 @@ def draw():
     global fontsize
     global font
     global index
+    global winner_index
     font_vs = load_font('kof_font.TTF', 35)
     font = load_font('kof_font.TTF', int(fontsize))
     clear_canvas()
@@ -166,6 +168,10 @@ def draw():
                            canvas_x // 2, canvas_y // 2,canvas_x,canvas_y)
     font_vs.draw(canvas_x // 2 - 50, 665, 'VS', (255, 255, 0))
     if dead_flag:
+        if player_r.hp <= 0:
+            winner_index = index
+        else:
+            winner_index = game_framework.get_character_index()
         font.draw(canvas_x // 2 - 220, 550, 'K O!', (255, 255, 0))
     if fontsize == 120:
         delay(2.0)

@@ -2,6 +2,7 @@ from pico2d import *
 
 import game_framework
 import game_world
+import play_mode
 import select_mode
 
 global font
@@ -15,6 +16,7 @@ def init():
     global winner_iori
     global winner_kyo
     global winner_mai
+    global winner_index
 
     global font
     font = load_font('kof_font.TTF', 80)
@@ -27,19 +29,19 @@ def init():
 
 def render_world():
     global font
-    character_index = game_framework.get_character_index()
     title.clip_composite_draw(0,0,752,224,0,'0',
                               canvas_x // 2, canvas_y // 2,canvas_x,canvas_y)
-    if character_index == 1:
+    winner_index = play_mode.winner_index
+    if winner_index == 1:
         winner_mai.clip_composite_draw(0,0,848,684,0,'0',
                               canvas_x // 2, canvas_y // 2 - 120,canvas_x // 3 * 2, canvas_y // 3 * 2)
-    elif character_index == 2:
+    elif winner_index == 2:
         winner_kk.clip_composite_draw(0, 0, 640, 652, 0, '0',
                                    canvas_x // 2, canvas_y // 2 - 120, canvas_x // 3 * 2, canvas_y // 3 * 2)
-    elif character_index == 3:
+    elif winner_index == 3:
         winner_kyo.clip_composite_draw(0, 0, 728, 652, 0, '0',
                                    canvas_x // 2, canvas_y // 2 - 120, canvas_x // 3 * 2, canvas_y // 3 * 2)
-    elif character_index == 4:
+    elif winner_index == 4:
         winner_iori.clip_composite_draw(0, 0, 1160, 752, 0, '0',
                                    canvas_x // 2, canvas_y // 2 - 120, canvas_x // 3 * 2, canvas_y // 3 * 2)
 
