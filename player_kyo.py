@@ -117,7 +117,7 @@ class Skill1:
                                                      self.player_kyo.x, self.player_kyo.y,400,400)
         else:
             self.player_kyo.image.clip_composite_draw(0, 0, 215, 122, 0, '0',
-                                                     self.player_kyo.x, self.player_kyo.y,600,400)
+                                                     self.player_kyo.x, self.player_kyo.y,400,400)
 
 class Jumpkick:
     def __init__(self, kyo):
@@ -318,6 +318,32 @@ class Idle:
             self.player_kyo.image.clip_composite_draw(64 * int(self.idle_frame), 0, 64, 106, 0, '',
                                                      self.player_kyo.x, self.player_kyo.y,150,300)
 
+class Dead:
+    def __init__(self, kyo):
+        self.player_kyo = kyo
+        self.dead_frame = 0
+
+    def enter(self, e):
+        self.player_kyo.dir = 0
+        self.player_kyo.load_image(f'kyo_dead_0.png')
+        self.dead_frame = 0
+        self.player_kyo.y = 200
+
+    def exit(self, e):
+        pass
+
+    def do(self):
+        self.dead_frame = (self.dead_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time * 0.5) % 12
+
+    def draw(self):
+        self.player_kyo.load_image(f'kyo_dead_{int(self.dead_frame)}.png')
+        if self.player_kyo.face_dir == 1:
+            self.player_kyo.image.clip_composite_draw(0, 0, 150, 123, 0, 'h',
+                                                     self.player_kyo.x, self.player_kyo.y,270,370)
+        else:
+            self.player_kyo.image.clip_composite_draw(0, 0, 150, 123, 0, '',
+                                                     self.player_kyo.x, self.player_kyo.y,270,370)
+
 class Playerkyo:
     def __init__(self):
         self.x, self.y = 950, 200
@@ -338,6 +364,7 @@ class Playerkyo:
         self.JUMPKICK = Jumpkick(self)
         self.SKILL1 = Skill1(self)
         self.SKILL2 = Skill2(self)
+        self.DEAD = Dead(self)
 
         def skill1_command(e):
             if k_down(e) and self.input_buffer == ['DOWN', 'J', 'K']:
@@ -351,22 +378,27 @@ class Playerkyo:
                 return True
             return False
 
+        def dead_check(e):
+            return e[0] == 'DEAD'
+
         self.state_machine = StateMachine(
             self.IDLE,
             {
                 self.IDLE: {right_down: self.RUN, left_down: self.RUN, up_down: self.JUMP,
                             (lambda e: k_down(e) and skill1_command(e)): self.SKILL1,
                             (lambda e: j_down(e) and skill2_command(e)): self.SKILL2,
-                            k_down: self.KICK, j_down: self.PUNCH},
+                            k_down: self.KICK, j_down: self.PUNCH,dead_check: self.DEAD},
                 self.RUN: {right_up: self.IDLE, left_up: self.IDLE, right_down: self.IDLE,
-                           left_down: self.IDLE, up_down: self.JUMP, k_down: self.KICK, j_down: self.PUNCH},
+                           left_down: self.IDLE, up_down: self.JUMP, k_down: self.KICK,
+                           j_down: self.PUNCH,dead_check: self.DEAD},
                 self.JUMP: {time_out: self.IDLE,
-                            (lambda e, jj=self.JUMP: k_down(e) and jj.jump_frame < 7): self.JUMPKICK},
-                self.JUMPKICK: {time_out: self.IDLE},
-                self.KICK: {time_out: self.IDLE},
-                self.PUNCH: {time_out: self.IDLE},
+                            (lambda e, jj=self.JUMP: k_down(e) and jj.jump_frame < 7): self.JUMPKICK,dead_check: self.DEAD},
+                self.JUMPKICK: {time_out: self.IDLE,dead_check: self.DEAD},
+                self.KICK: {time_out: self.IDLE,dead_check: self.DEAD},
+                self.PUNCH: {time_out: self.IDLE,dead_check: self.DEAD},
                 self.SKILL1: {time_out: self.IDLE},
-                self.SKILL2: {time_out: self.IDLE,}
+                self.SKILL2: {time_out: self.IDLE},
+                self.DEAD: {}
             }
         )
 
@@ -374,6 +406,10 @@ class Playerkyo:
         self.image = load_resource(path)
 
     def update(self):
+        if self.hp <= 0 and self.state_machine.cur_state != self.DEAD:
+            self.state_machine.handle_state_event(('DEAD', None))
+            return
+
         current_state = self.state_machine.cur_state
         if self.prev_state != current_state:
             # 공격 상태로 전환될 때 hit 플래그 초기화
@@ -429,6 +465,8 @@ class Playerkyo:
                 return self.x - 220, self.y - 70, self.x + 100, self.y + 150
             elif self.state_machine.cur_state == self.SKILL2:
                 return self.x - 170, self.y - 150, self.x + 100, self.y + 300
+            elif self.state_machine.cur_state == self.DEAD:
+                return self.x - 200, self.y - 50, self.x + 100, self.y + 200
         else:
             if (self.state_machine.cur_state == self.IDLE or
                     self.state_machine.cur_state == self.RUN):
@@ -445,6 +483,8 @@ class Playerkyo:
                 return self.x - 70, self.y - 70, self.x + 270, self.y + 150
             elif self.state_machine.cur_state == self.SKILL2:
                 return self.x - 100, self.y - 150, self.x + 170, self.y + 300
+            elif self.state_machine.cur_state == self.DEAD:
+                return self.x - 200, self.y - 50, self.x + 100, self.y + 200
 
     def handle_collision(self, group, other):
         if group == 'r_vs_l':

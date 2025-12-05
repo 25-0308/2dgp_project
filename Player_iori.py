@@ -404,15 +404,15 @@ class Playeriori:
                             (lambda e: j_down(e) and skill2_command(e)): self.SKILL2,
                             k_down: self.KICK, j_down: self.PUNCH,dead_check: self.Dead},
                 self.RUN: {right_up: self.IDLE, left_up: self.IDLE, right_down: self.IDLE,
-                           left_down: self.IDLE, up_down: self.JUMP, k_down: self.KICK, j_down: self.PUNCH},
+                           left_down: self.IDLE, up_down: self.JUMP, k_down: self.KICK, j_down: self.PUNCH,dead_check: self.Dead},
                 self.JUMP: {time_out: self.IDLE,
-                            (lambda e, jj=self.JUMP: k_down(e) and jj.jump_frame < 7): self.JUMPKICK},
-                self.JUMPKICK: {time_out: self.IDLE},
-                self.KICK: {time_out: self.IDLE},
-                self.PUNCH: {time_out: self.IDLE},
+                            (lambda e, jj=self.JUMP: k_down(e) and jj.jump_frame < 7): self.JUMPKICK,dead_check: self.Dead},
+                self.JUMPKICK: {time_out: self.IDLE,dead_check: self.Dead},
+                self.KICK: {time_out: self.IDLE,dead_check: self.Dead},
+                self.PUNCH: {time_out: self.IDLE,dead_check: self.Dead},
                 self.SKILL1: {time_out: self.IDLE},
                 self.SKILL2: {time_out: self.IDLE,},
-                self.Dead: {time_out: self.IDLE,}
+                self.Dead: {}
             }
         )
 
