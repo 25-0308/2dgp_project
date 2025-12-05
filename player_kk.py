@@ -478,6 +478,12 @@ class Playerkk:
             elif self.state_machine.cur_state == self.DEAD:
                 return self.x - 80, self.y - 70, self.x + 80, self.y + 70
 
+    def handle_event_simulate(self, keydown_or_up, key):
+        event = type('Event', (), {})()
+        event.type = keydown_or_up
+        event.key = key
+        self.handle_event(event)
+
     def handle_collision(self, group, other):
         if group == 'r_vs_l':
             # 자신이 스킬 중무적

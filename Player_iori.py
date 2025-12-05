@@ -379,7 +379,7 @@ class Playeriori:
         self.JUMPKICK = Jumpkick(self)
         self.SKILL1 = Skill1(self)
         self.SKILL2 = Skill2(self)
-        self.Dead = Dead(self)
+        self.DEAD = Dead(self)
 
         def skill1_command(e):
             if k_down(e) and self.input_buffer == ['DOWN', 'J', 'K']:
@@ -402,17 +402,19 @@ class Playeriori:
                 self.IDLE: {right_down: self.RUN, left_down: self.RUN, up_down: self.JUMP,
                             (lambda e: k_down(e) and skill1_command(e)): self.SKILL1,
                             (lambda e: j_down(e) and skill2_command(e)): self.SKILL2,
-                            k_down: self.KICK, j_down: self.PUNCH,dead_check: self.Dead},
+                            k_down: self.KICK, j_down: self.PUNCH, dead_check: self.DEAD},
                 self.RUN: {right_up: self.IDLE, left_up: self.IDLE, right_down: self.IDLE,
-                           left_down: self.IDLE, up_down: self.JUMP, k_down: self.KICK, j_down: self.PUNCH,dead_check: self.Dead},
+                           left_down: self.IDLE, up_down: self.JUMP, k_down: self.KICK, j_down: self.PUNCH,
+                           dead_check: self.DEAD},
                 self.JUMP: {time_out: self.IDLE,
-                            (lambda e, jj=self.JUMP: k_down(e) and jj.jump_frame < 7): self.JUMPKICK,dead_check: self.Dead},
-                self.JUMPKICK: {time_out: self.IDLE,dead_check: self.Dead},
-                self.KICK: {time_out: self.IDLE,dead_check: self.Dead},
-                self.PUNCH: {time_out: self.IDLE,dead_check: self.Dead},
+                            (lambda e, jj=self.JUMP: k_down(e) and jj.jump_frame < 7): self.JUMPKICK,
+                            dead_check: self.DEAD},
+                self.JUMPKICK: {time_out: self.IDLE, dead_check: self.DEAD},
+                self.KICK: {time_out: self.IDLE, dead_check: self.DEAD},
+                self.PUNCH: {time_out: self.IDLE, dead_check: self.DEAD},
                 self.SKILL1: {time_out: self.IDLE},
-                self.SKILL2: {time_out: self.IDLE,},
-                self.Dead: {}
+                self.SKILL2: {time_out: self.IDLE},
+                self.DEAD: {},
             }
         )
 
@@ -420,7 +422,7 @@ class Playeriori:
         self.image = load_resource(path)
 
     def update(self):
-        if self.hp <= 0 and self.state_machine.cur_state != self.Dead:
+        if self.hp <= 0 and self.state_machine.cur_state != self.DEAD:
             self.state_machine.handle_state_event(('DEAD', None))
             return
 
@@ -479,7 +481,7 @@ class Playeriori:
                 return self.x - 350, self.y - 270, self.x - 130, self.y + 230
             elif self.state_machine.cur_state == self.SKILL2:
                 return self.x - 200, self.y - 100, self.x + 100, self.y + 200
-            elif self.state_machine.cur_state == self.Dead:
+            elif self.state_machine.cur_state == self.DEAD:
                 return self.x - 60, self.y - 100, self.x + 60, self.y + 100
         else:
             if (self.state_machine.cur_state == self.IDLE or
@@ -494,11 +496,17 @@ class Playeriori:
             elif self.state_machine.cur_state == self.PUNCH:
                 return self.x - 40, self.y + 10, self.x + 140, self.y + 70
             elif self.state_machine.cur_state == self.SKILL1:
-                return self.x + 150, self.y - 270, self.x + 310, self.y + 230
+                return self.x + 50, self.y - 270, self.x + 310, self.y + 230
             elif self.state_machine.cur_state == self.SKILL2:
                 return self.x - 100, self.y - 100, self.x + 200, self.y + 200
-            elif self.state_machine.cur_state == self.Dead:
+            elif self.state_machine.cur_state == self.DEAD:
                 return self.x - 60, self.y - 100, self.x + 60, self.y + 100
+
+    def handle_event_simulate(self, keydown_or_up, key):
+        event = type('Event', (), {})()
+        event.type = keydown_or_up
+        event.key = key
+        self.handle_event(event)
 
     def handle_collision(self, group, other):
         if group == 'r_vs_l':

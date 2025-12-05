@@ -9,6 +9,7 @@ from player_kk import Playerkk
 from Player_iori import Playeriori
 from player_kyo import Playerkyo
 from player_mai import Playermai
+from ai_player import AIPlayer
 
 import game_world
 import ending_mode
@@ -120,6 +121,11 @@ def init():
     # player_l.x, player_l.y = 950, 200
     # player_r.x, player_r.y = 330, 200
 
+    # player_l.ai = AIPlayer(player_l, 'easy')
+    # player_l.ai = AIPlayer(player_l,'normal')
+    player_l.ai = AIPlayer(player_l, 'hard')
+    player_l.ai.set_target(player_r)
+
     game_world.add_object(player_r)
     game_world.add_object(player_l)
 
@@ -142,6 +148,8 @@ def update():
         fontsize += 50*game_framework.frame_time
         if(fontsize >=120):
             fontsize = 120
+    if hasattr(player_l, 'ai'):
+        player_l.ai.update()
 
     bg = load_image(f'stage_{bg_count % 8}.png')
     game_world.handle_collisions()

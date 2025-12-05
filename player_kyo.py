@@ -418,6 +418,12 @@ class Playerkyo:
             self.prev_state = current_state
         self.state_machine.update()
 
+    def handle_event_simulate(self, keydown_or_up, key):
+        event = type('Event', (), {})()
+        event.type = keydown_or_up
+        event.key = key
+        self.handle_event(event)
+
     def handle_event(self, event):
         if event.type == SDL_KEYDOWN:
             if event.key == SDLK_DOWN:
