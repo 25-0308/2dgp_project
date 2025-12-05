@@ -518,7 +518,7 @@ class Playeriori:
                 # 상대방의 스킬 공격인지 확인
                 if (other.state_machine.cur_state == other.SKILL1 or
                         other.state_machine.cur_state == other.SKILL2):
-                    self.hp -= 60
+                    self.hp -= 30
                 else:
                     self.hp -= 10
                 other.hit = True
