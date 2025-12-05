@@ -2,20 +2,20 @@ import os
 
 
 def rename_skill1_files():
-    iori_folder = r'C:\Users\Admin\Desktop\2DGP\2dgp_project\kk'
+    iori_folder = r'C:\Users\Admin\Desktop\2DGP\2dgp_project\mai'
 
     # iori 폴더의 모든 파일 가져오기
     files = os.listdir(iori_folder)
 
     # b35로 시작하는 파일만 필터링
-    b35_files = [f for f in files if f.startswith('645bcf3955a34457c6045f0ec70930d4EtMWsOG4g3foOhXx-')]
+    b35_files = [f for f in files if f.startswith('20a0db3ec1f240e79bb2b0f2f34cca87PgUNgpr85ns6xZO3-')]
 
     for old_name in b35_files:
         # 숫자 부분 추출 (파일명에서 마지막 '-' 이후부터 '.png' 이전까지)
         number = old_name.split('-')[-1].replace('.png', '')
 
         # 새 파일명 생성
-        new_name = f'kk_dead_{number}.png'
+        new_name = f'mai_dead_{number}.png'
 
         # 전체 경로 생성
         old_path = os.path.join(iori_folder, old_name)
