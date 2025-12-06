@@ -112,7 +112,7 @@ class AIPlayer:
         dx = self.target.x - self.player.x
 
         # 후퇴 방향을 결정하고 계속 그 방향으로 이동
-        new_dir = SDLK_LEFT if dx > 0 else SDLK_RIGHT
+        new_dir = SDLK_LEFT
         if self.current_move_dir != new_dir:
             if self.current_move_dir:
                 self.player.handle_event_simulate(SDL_KEYUP, self.current_move_dir)
@@ -169,6 +169,13 @@ class AIPlayer:
         self.action_cooldown = self.reaction_time * 1.5
         return BehaviorTree.SUCCESS
 
+    def do_random_basic_attack(self):
+        if random.random() < 0.5:
+            return self.do_quick_punch()
+        else:
+            return self.do_heavy_kick()
+
+
     # ==================== Behavior Tree 구성 ====================
 
     def build_behavior_tree(self):
@@ -188,16 +195,13 @@ class AIPlayer:
                                      )
 
         # 2. 일반 공격 행동 그룹 (체력 40 이상일 때만 실행)
+        # 2. 일반 공격 행동 그룹 (체력 40 이상일 때만 실행)
         offensive_behavior = Selector('⚔️ 공격',
                                       Sequence('🔥 피니시!',
                                                Condition('상대 체력 낮음?', self.is_target_low_hp),
                                                Condition('공격 사거리?', self.is_target_in_attack_range),
                                                Selector('필살기 선택', Action('스킬1', self.do_skill1),
                                                         Action('스킬2', self.do_skill2))
-                                               ),
-                                      Sequence('✈️ 대공',
-                                               Condition('상대 점프 중?', self.is_target_jumping),
-                                               Action('대공 공격', self.do_anti_air)
                                                ),
                                       Sequence('🥊 근접 전투',
                                                Condition('공격 사거리?', self.is_target_in_attack_range),
@@ -207,8 +211,8 @@ class AIPlayer:
                                                                  Selector('스킬 선택', Action('스킬1', self.do_skill1),
                                                                           Action('스킬2', self.do_skill2))
                                                                  ),
-                                                        Action('빠른 펀치', self.do_quick_punch),
-                                                        Action('강 킥', self.do_heavy_kick)
+                                                        # 펀치와 킥 중 랜덤으로 하나만 실행
+                                                        Action('🎲 기본 공격', self.do_random_basic_attack)
                                                         )
                                                )
                                       )
