@@ -3,6 +3,7 @@ from pico2d import *
 import game_framework
 import game_world
 import play_mode
+from sound_manager import sound_manager
 
 # 초기 화면 구성
 def init():
@@ -30,10 +31,12 @@ def handle_events():
         elif event.type == SDL_KEYDOWN:
             if event.key == SDLK_LEFT:  # '1' 키
                 character_index -= 1
+                sound_manager.play('button')
                 if character_index < 1:
                     character_index = 4
             elif event.key == SDLK_RIGHT:  # '2' 키
                 character_index += 1
+                sound_manager.play('button')
                 if character_index > 4:
                     character_index = 1
             elif event.key == SDLK_SPACE:

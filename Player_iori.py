@@ -1,7 +1,7 @@
 from pico2d import load_image, draw_rectangle
 from sdl2 import SDL_KEYDOWN, SDLK_RIGHT, SDL_KEYUP, SDLK_LEFT, SDLK_UP, SDLK_k, SDLK_j, SDLK_DOWN
 import os
-
+from sound_manager import sound_manager
 
 import game_framework
 
@@ -160,6 +160,7 @@ class Punch:
 
     def enter(self, e):
         self.punch_frame = 0
+        sound_manager.play('punch')
 
     def exit(self, e):
         pass
@@ -183,9 +184,11 @@ class Kick:
         self.player_iori = iori
         self.kick_frame = 0
 
+
     def enter(self, e):
         self.kick_frame = 0
         self.player_iori.y = 250
+        sound_manager.play('kick')
 
     def exit(self, e):
         self.player_iori.y = 200
@@ -526,7 +529,9 @@ class Playeriori:
                 # 상대방의 스킬 공격인지 확인
                 if (other.state_machine.cur_state == other.SKILL1 or
                         other.state_machine.cur_state == other.SKILL2):
+                    sound_manager.play('hit')
                     self.hp -= 30
                 else:
+                    sound_manager.play('hit')
                     self.hp -= 10
                 other.hit = True

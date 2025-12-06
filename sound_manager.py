@@ -1,5 +1,8 @@
-# sound_manager.py
+import os
 from pico2d import load_wav
+from sound_files import SOUND_FILES
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 class SoundManager:
     _instance = None
@@ -7,20 +10,20 @@ class SoundManager:
     def __new__(cls):
         if cls._instance is None:
             cls._instance = super(SoundManager, cls).__new__(cls)
-            # 사운드를 저장할 딕셔너리 초기화
             cls._instance.sounds = {}
         return cls._instance
 
-    def load(self, name, file_path):
-        if name not in self.sounds:
-            self.sounds[name] = load_wav(file_path)
-            print(f'[SoundManager] Loaded: {name} from {file_path}')
+    def load_all(self):
+        for name, path in SOUND_FILES.items():
+            full_path = os.path.join(BASE_DIR, path)
+            if name not in self.sounds:
+                self.sounds[name] = load_wav(full_path)
 
-    def play(self, name):
+    def play(self, name, volume=64):
         if name in self.sounds:
-            # 볼륨 조절이 필요하다면 self.sounds[name].set_volume(64) 와 같이 사용 (0~128)
+            self.sounds[name].set_volume(volume) # 볼륨 설정 (0 ~ 128)
             self.sounds[name].play()
         else:
-            print(f'[SoundManager] Warning: Sound not found - {name}')
+            pass
 
 sound_manager = SoundManager()
