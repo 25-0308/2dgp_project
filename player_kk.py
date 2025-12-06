@@ -76,7 +76,8 @@ class Skill2:
         self.player_kk.load_image('kk_skill2_sprite.png')
         self.skill2_frame = 0
         self.player_kk.y = 300
-        sound_manager.play('kk_skill2')
+        sound_manager.play('kk_skill2',40)
+        sound_manager.play('kk_skill')
 
     def exit(self, e):
         self.player_kk.y = 200
@@ -103,7 +104,8 @@ class Skill1:
         self.player_kk.load_image('kk_skill1_sprite.png')
         self.skill1_frame = 0
         self.player_kk.y = 300
-        sound_manager.play('kk_skill1')
+        sound_manager.play('kk_skill1',40)
+        sound_manager.play('kk_skill')
 
     def exit(self, e):
         self.player_kk.y = 200

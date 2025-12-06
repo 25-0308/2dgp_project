@@ -14,5 +14,7 @@ SOUND_FILES = {
     'iori_skill1_ready': 'sound/iori_skill1_ready.wav',
     'iori_skill': 'sound/iori_skill.wav',
     'iori_ment': 'sound/iori_ment.wav',
+    'kk_skill': 'sound/kk_skill.wav',
+    'kk_victory': 'sound/kk_victory.wav',
     'iori_victory': 'sound/iori_victory.wav',
 }
