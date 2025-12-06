@@ -41,6 +41,7 @@ def handle_events():
                     character_index = 1
             elif event.key == SDLK_SPACE:
                 game_framework.set_character_index(character_index)
+                sound_manager.play('next_scene')
                 game_framework.change_mode(play_mode)# 'SPACE' 키
             elif event.key == SDLK_ESCAPE:
                 game_framework.quit()

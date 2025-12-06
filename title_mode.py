@@ -3,6 +3,7 @@ from pico2d import *
 import game_framework
 import game_world
 import select_mode
+from sound_manager import sound_manager
 
 # 초기 화면 구성
 def init():
@@ -24,7 +25,8 @@ def handle_events():
             game_framework.quit()
 
         elif event.type == SDL_KEYDOWN:
-            if event.key == SDLK_SPACE:  # '=' 키
+            if event.key == SDLK_SPACE:
+                sound_manager.play('next_scene')
                 game_framework.change_mode(select_mode)
             elif event.key == SDLK_ESCAPE:
                 game_framework.quit()
