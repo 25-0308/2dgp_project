@@ -75,6 +75,7 @@ class Skill2:
         self.player_kyo.load_image('kyo_skill2_sprite.png')
         self.skill2_frame = 0
         self.player_kyo.y = 350
+        sound_manager.play('kyo_ment',50)
         sound_manager.play('kyo_skill', 10)
 
     def exit(self, e):
@@ -103,6 +104,7 @@ class Skill1:
         self.player_kyo.load_image('kyo_skill1_0.png')
         self.skill1_frame = 0
         self.player_kyo.y = 250
+        sound_manager.play('kyo_ment', 50)
 
 
     def exit(self, e):
