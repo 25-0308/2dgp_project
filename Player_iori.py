@@ -77,6 +77,8 @@ class Skill2:
         self.player_iori.load_image('iori_skill2_sprite.png')
         self.skill2_frame = 0
         self.player_iori.y = 300
+        sound_manager.play('iori_ment', 50)
+        sound_manager.play('iori_skill',20)
 
     def exit(self, e):
         self.player_iori.y = 200
@@ -100,6 +102,7 @@ class Skill1:
         self.player_iori = iori
         self.skill1_frame = 0
         self.cur_x = 0
+        self.sound_flag = False
 
     def enter(self, e):
         self.player_iori.load_image('iori_skill1_0.png')
@@ -110,13 +113,19 @@ class Skill1:
             self.player_iori.x += 100
         else:
             self.player_iori.x -= 100
+        sound_manager.play('iori_ment',50)
+        sound_manager.play('iori_skill1_ready',35)
     def exit(self, e):
         self.player_iori.y = 200
         self.player_iori.x = self.cur_x
+        self.sound_flag = False
 
     def do(self):
         self.skill1_frame = (self.skill1_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time * 5) % 50
         self.player_iori.load_image(f'iori_skill1_{int(self.skill1_frame)}.png')
+        if self.skill1_frame >= 34 and not self.sound_flag:
+            sound_manager.play('iori_skill',20)
+            self.sound_flag = True
         if self.skill1_frame >= 49:
             self.player_iori.state_machine.handle_state_event(('TIMEOUT', None))
     def draw(self):
