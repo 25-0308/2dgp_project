@@ -75,7 +75,7 @@ class Skill2:
         self.player_mai.load_image('mai_skill2_sprite.png')
         self.skill2_frame = 0
         self.player_mai.y = 250
-        sound_manager.play('mai_skill',90)
+        sound_manager.play('mai_skill',60)
 
     def exit(self, e):
         self.player_mai.y = 200
@@ -101,7 +101,7 @@ class Skill1:
     def enter(self, e):
         self.player_mai.load_image('mai_skill1_sprite.png')
         self.skill1_frame = 0
-        sound_manager.play('mai_skill',90)
+        sound_manager.play('mai_skill',60)
 
     def exit(self, e):
         self.player_mai.y = 200

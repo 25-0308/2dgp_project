@@ -75,6 +75,7 @@ class Skill2:
         self.player_kyo.load_image('kyo_skill2_sprite.png')
         self.skill2_frame = 0
         self.player_kyo.y = 350
+        sound_manager.play('kyo_skill', 10)
 
     def exit(self, e):
         self.player_kyo.y = 200
@@ -96,18 +97,24 @@ class Skill1:
     def __init__(self, kyo):
         self.player_kyo = kyo
         self.skill1_frame = 0
+        self.sound_flag = False
 
     def enter(self, e):
         self.player_kyo.load_image('kyo_skill1_0.png')
         self.skill1_frame = 0
         self.player_kyo.y = 250
 
+
     def exit(self, e):
         self.player_kyo.y = 200
+        self.sound_flag = False
 
     def do(self):
         self.skill1_frame = (self.skill1_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time * 3) % 25
         self.player_kyo.load_image(f'kyo_skill1_{int(self.skill1_frame)}.png')
+        if self.skill1_frame >= 12 and not self.sound_flag:
+            self.sound_flag = True
+            sound_manager.play('kyo_skill', 10)
         if self.skill1_frame >= 24:
             self.player_kyo.state_machine.handle_state_event(('TIMEOUT', None))
 

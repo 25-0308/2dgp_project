@@ -9,5 +9,6 @@ SOUND_FILES = {
     'kk_skill1': 'sound/kk_skill1.wav',
     'kk_skill2': 'sound/kk_skill2.wav',
     'ko': 'sound/ko.wav',
-    'winner': 'sound/winner.wav'
+    'winner': 'sound/winner.wav',
+    'kyo_skill': 'sound/kyo_skill.wav',
 }
