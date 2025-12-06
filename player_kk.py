@@ -6,6 +6,7 @@ import os
 import game_framework
 
 from state_machine import StateMachine
+from sound_manager import sound_manager
 
 time_out = lambda e: e[0] == 'TIMEOUT'
 
@@ -75,6 +76,7 @@ class Skill2:
         self.player_kk.load_image('kk_skill2_sprite.png')
         self.skill2_frame = 0
         self.player_kk.y = 300
+        sound_manager.play('kk_skill2')
 
     def exit(self, e):
         self.player_kk.y = 200
@@ -101,6 +103,7 @@ class Skill1:
         self.player_kk.load_image('kk_skill1_sprite.png')
         self.skill1_frame = 0
         self.player_kk.y = 300
+        sound_manager.play('kk_skill1')
 
     def exit(self, e):
         self.player_kk.y = 200
@@ -127,6 +130,7 @@ class Jumpkick:
         global jumpattack_k_frame
         self.player_kk.load_image('kk_jumpattack_sprite.png')
         self.jumpkick_frame = jumpattack_k_frame
+        sound_manager.play('kick',20)
 
     def exit(self, e):
         self.player_kk.y = 200
@@ -151,6 +155,7 @@ class Punch:
 
     def enter(self, e):
         self.punch_frame = 0
+        sound_manager.play('punch',20)
 
     def exit(self, e):
         pass
@@ -179,6 +184,7 @@ class Kick:
 
     def enter(self, e):
         self.kick_frame = 0
+        sound_manager.play('kick',20)
 
     def exit(self, e):
         pass
@@ -503,6 +509,8 @@ class Playerkk:
                 if (other.state_machine.cur_state == other.SKILL1 or
                         other.state_machine.cur_state == other.SKILL2):
                     self.hp -= 30
+                    sound_manager.play('hit',30)
                 else:
                     self.hp -= 10
+                    sound_manager.play('hit',30)
                 other.hit = True

@@ -136,6 +136,7 @@ class Jumpkick:
         global jumpattack_k_frame
         self.player_iori.load_image('iori_jumpattack_sprite.png')
         self.jumpkick_frame = jumpattack_k_frame
+        sound_manager.play('kick',20)
 
     def exit(self, e):
         self.player_iori.y = 200
@@ -160,7 +161,7 @@ class Punch:
 
     def enter(self, e):
         self.punch_frame = 0
-        sound_manager.play('punch')
+        sound_manager.play('punch',20)
 
     def exit(self, e):
         pass
@@ -188,7 +189,7 @@ class Kick:
     def enter(self, e):
         self.kick_frame = 0
         self.player_iori.y = 250
-        sound_manager.play('kick')
+        sound_manager.play('kick',20)
 
     def exit(self, e):
         self.player_iori.y = 200
@@ -529,9 +530,9 @@ class Playeriori:
                 # 상대방의 스킬 공격인지 확인
                 if (other.state_machine.cur_state == other.SKILL1 or
                         other.state_machine.cur_state == other.SKILL2):
-                    sound_manager.play('hit')
+                    sound_manager.play('hit',30)
                     self.hp -= 30
                 else:
-                    sound_manager.play('hit')
+                    sound_manager.play('hit',30)
                     self.hp -= 10
                 other.hit = True

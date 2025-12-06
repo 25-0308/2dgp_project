@@ -128,6 +128,7 @@ class Jumpkick:
         global jumpattack_k_frame
         self.player_mai.load_image('mai_jumpattack_sprite.png')
         self.jumpkick_frame = jumpattack_k_frame
+        sound_manager.play('kick',20)
 
     def exit(self, e):
         self.player_mai.y = 200
@@ -152,6 +153,7 @@ class Punch:
 
     def enter(self, e):
         self.punch_frame = 0
+        sound_manager.play('punch', 20)
 
     def exit(self, e):
         pass
@@ -177,6 +179,7 @@ class Kick:
 
     def enter(self, e):
         self.kick_frame = 0
+        sound_manager.play('kick', 20)
 
     def exit(self, e):
         pass
@@ -510,7 +513,9 @@ class Playermai:
                 # 상대방의 스킬 공격인지 확인
                 if (other.state_machine.cur_state == other.SKILL1 or
                         other.state_machine.cur_state == other.SKILL2):
+                    sound_manager.play('hit',30)
                     self.hp -=30
                 else:
                     self.hp -=10
+                    sound_manager.play('hit',30)
                 other.hit = True

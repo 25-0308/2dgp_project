@@ -11,6 +11,8 @@ from player_kyo import Playerkyo
 from player_mai import Playermai
 from ai_player import AIPlayer
 
+from sound_manager import sound_manager
+
 import game_world
 import ending_mode
 
@@ -131,6 +133,8 @@ def init():
     game_world.add_object(player_l)
 
     game_world.add_collision_pair('r_vs_l',player_l,player_r)
+    sound_manager.play('fight')
+
 
 def update():
     game_world.update()
@@ -138,8 +142,9 @@ def update():
     global bg
     global bg_timer
     global fontsize
-    if player_r.hp <= 0 or player_l.hp <= 0:
-        global dead_flag
+    global dead_flag
+    if (player_r.hp <= 0 or player_l.hp <= 0) and not dead_flag:
+        sound_manager.play('ko')
         dead_flag = True
     bg_timer += game_framework.frame_time
     if bg_timer >= 0.15:

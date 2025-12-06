@@ -5,6 +5,8 @@ import game_world
 import play_mode
 import select_mode
 
+from sound_manager import sound_manager
+
 global font
 
 # 초기 화면 구성
@@ -26,6 +28,7 @@ def init():
     winner_iori = load_image('iori_win.png')
     winner_kyo = load_image('kyo_win.png')
     winner_mai = load_image('mai_win.png')
+    sound_manager.play('winner')
 
 def render_world():
     global font
