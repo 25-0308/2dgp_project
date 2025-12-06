@@ -1,7 +1,7 @@
 from pico2d import load_image, draw_rectangle
 from sdl2 import SDL_KEYDOWN, SDLK_RIGHT, SDL_KEYUP, SDLK_LEFT, SDLK_UP, SDLK_k, SDLK_j, SDLK_DOWN
 import os
-
+from sound_manager import sound_manager
 
 import game_framework
 
@@ -75,6 +75,7 @@ class Skill2:
         self.player_mai.load_image('mai_skill2_sprite.png')
         self.skill2_frame = 0
         self.player_mai.y = 250
+        sound_manager.play('mai_skill',90)
 
     def exit(self, e):
         self.player_mai.y = 200
@@ -100,6 +101,7 @@ class Skill1:
     def enter(self, e):
         self.player_mai.load_image('mai_skill1_sprite.png')
         self.skill1_frame = 0
+        sound_manager.play('mai_skill',90)
 
     def exit(self, e):
         self.player_mai.y = 200
