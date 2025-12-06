@@ -356,6 +356,7 @@ class Dead:
             self.player_iori.x -= 50
         else:
             self.player_iori.x += 50
+        sound_manager.play('iori_dead',60)
 
     def exit(self, e):
         pass

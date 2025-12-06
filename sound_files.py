@@ -16,7 +16,13 @@ SOUND_FILES = {
     'iori_ment': 'sound/iori_ment.wav',
     'kk_skill': 'sound/kk_skill.wav',
     'kyo_ment': 'sound/kyo_ment.wav',
+    'mai_ment': 'sound/mai_ment.wav',
     'kyo_victory': 'sound/kyo_victory.wav',
     'kk_victory': 'sound/kk_victory.wav',
     'iori_victory': 'sound/iori_victory.wav',
+    'mai_victory': 'sound/mai_victory.wav',
+    'kk_dead': 'sound/kk_dead.wav',
+    'kyo_dead': 'sound/kyo_dead.wav',
+    'iori_dead': 'sound/iori_dead.wav',
+    'mai_dead': 'sound/mai_dead.wav',
 }

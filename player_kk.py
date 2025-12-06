@@ -329,6 +329,7 @@ class Dead:
         self.player_kk.load_image(f'kk_dead_0.png')
         self.dead_frame = 0
         self.player_kk.y = 200
+        sound_manager.play('kk_dead',70)
 
     def exit(self, e):
         pass

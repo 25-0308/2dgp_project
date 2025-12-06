@@ -28,7 +28,15 @@ def init():
     winner_iori = load_image('iori_win.png')
     winner_kyo = load_image('kyo_win.png')
     winner_mai = load_image('mai_win.png')
-    sound_manager.play('winner')
+    sound_manager.play('winner',50)
+    if play_mode.winner_index == 1:
+        sound_manager.play('mai_victory',50)
+    elif play_mode.winner_index == 2:
+        sound_manager.play('kk_victory',50)
+    elif play_mode.winner_index == 3:
+        sound_manager.play('kyo_victory',50)
+    elif play_mode.winner_index == 4:
+        sound_manager.play('iori_victory',50)
 
 def render_world():
     global font

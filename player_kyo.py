@@ -340,6 +340,7 @@ class Dead:
         self.player_kyo.load_image(f'kyo_dead_0.png')
         self.dead_frame = 0
         self.player_kyo.y = 200
+        sound_manager.play('kyo_dead',60)
 
     def exit(self, e):
         pass

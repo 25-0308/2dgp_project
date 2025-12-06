@@ -133,7 +133,7 @@ def init():
     game_world.add_object(player_l)
 
     game_world.add_collision_pair('r_vs_l',player_l,player_r)
-    sound_manager.play('fight')
+    sound_manager.play('fight',58)
 
 
 def update():
@@ -144,7 +144,7 @@ def update():
     global fontsize
     global dead_flag
     if (player_r.hp <= 0 or player_l.hp <= 0) and not dead_flag:
-        sound_manager.play('ko')
+        sound_manager.play('ko',50)
         dead_flag = True
     bg_timer += game_framework.frame_time
     if bg_timer >= 0.15:
