@@ -29,13 +29,13 @@ def init():
     winner_kyo = load_image('kyo_win.png')
     winner_mai = load_image('mai_win.png')
     if play_mode.winner_index == 1:
-        sound_manager.play('mai_victory',50)
+        sound_manager.play('mai_victory',70)
     elif play_mode.winner_index == 2:
-        sound_manager.play('kk_victory',50)
+        sound_manager.play('kk_victory',70)
     elif play_mode.winner_index == 3:
-        sound_manager.play('kyo_victory',50)
+        sound_manager.play('kyo_victory',70)
     elif play_mode.winner_index == 4:
-        sound_manager.play('iori_victory',50)
+        sound_manager.play('iori_victory',70)
 
 def render_world():
     global font
