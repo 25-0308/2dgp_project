@@ -180,6 +180,7 @@ def draw():
         font.draw(canvas_x // 2 - 220, 550, 'K O!', (255, 255, 0))
     if fontsize == 120:
         delay(2.0)
+        dead_flag = False
         game_framework.change_mode(ending_mode)
 
     draw_hp_bar(player_l, 50)  # 왼쪽 플레이어
