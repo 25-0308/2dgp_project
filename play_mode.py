@@ -163,7 +163,7 @@ def update():
 def draw():
     global dead_flag
     global fontsize
-    global font
+    global fontn
     global index
     global winner_index
     font_vs = load_font('kof_font.TTF', 35)
@@ -192,6 +192,7 @@ def draw():
 
 def finish():
     game_world.clear()
+    game_world.collision_pairs.clear()
 
 
 def pause(): pass

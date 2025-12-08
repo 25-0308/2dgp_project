@@ -4,6 +4,7 @@ import game_framework
 import game_world
 import play_mode
 import select_mode
+import title_mode
 
 from sound_manager import sound_manager
 
@@ -69,7 +70,7 @@ def handle_events():
             if event.key == SDLK_ESCAPE:
                 game_framework.quit()
             elif event.key == SDLK_SPACE:
-                game_framework.change_mode(select_mode)
+                game_framework.change_mode(title_mode)
 
 
 def update():

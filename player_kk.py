@@ -332,7 +332,7 @@ class Dead:
         sound_manager.play('kk_dead',70)
 
     def exit(self, e):
-        pass
+        self.player_kk.hit = False
 
     def do(self):
         self.dead_frame = (self.dead_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time * 0.8) % 28
